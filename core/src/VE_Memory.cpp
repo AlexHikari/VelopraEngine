@@ -1,5 +1,7 @@
 #include "VE_Memory.h"
 
+#include <cstdlib>
+
 namespace VelopraEngine {
 	namespace Core {
 
@@ -13,6 +15,26 @@ namespace VelopraEngine {
 			// Use operator delete to deallocate memory.
 			// This does not call destructors for non-POD types.
 			::operator delete(ptr);
+		}
+
+		void* AllocateAligned(std::size_t size, std::size_t alignment) {
+			#if defined(_MSC_VER)
+				return _aligned_malloc(size, alignment);
+			#else
+				void* ptr = nullptr;
+				if (posix_memalign(&ptr, alignment, size) != 0) {
+					ptr = nullptr;
+				}
+			return ptr;
+			#endif
+		}
+
+		void DeallocateAligned(void* ptr) {
+			#if defined(_MSC_VER)
+				_aligned_free(ptr);
+			#else
+				free(ptr);
+			#endif
 		}
 
 		// Future custom memory management functions can be implemented here.

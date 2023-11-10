@@ -1,6 +1,6 @@
 #pragma once
-#ifndef HISIDIAN_ENGINE_CORE_TYPES_H
-#define HISIDIAN_ENGINE_CORE_TYPES_H
+#ifndef VELOPRA_ENGINE_CORE_TYPES_H
+#define VELOPRA_ENGINE_CORE_TYPES_H
 
 #include <cstdint>
 
@@ -21,4 +21,4 @@ namespace VelopraEngine {
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // HISIDIAN_ENGINE_CORE_TYPES_H
+#endif // VELOPRA_ENGINE_CORE_TYPES_H

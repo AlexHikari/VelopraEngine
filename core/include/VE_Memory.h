@@ -1,5 +1,5 @@
-#ifndef HISIDIAN_ENGINE_CORE_MEMORY_H
-#define HISIDIAN_ENGINE_CORE_MEMORY_H
+#ifndef VELOPRA_ENGINE_CORE_MEMORY_H
+#define VELOPRA_ENGINE_CORE_MEMORY_H
 
 #include <cstddef>
 
@@ -12,11 +12,11 @@ namespace VelopraEngine {
 		// Deallocates a block of memory pointed to by ptr.
 		void Deallocate(void* ptr);
 
-		// You might later add custom allocators for different purposes, e.g.,
-		// void* AllocateAligned(std::size_t size, std::size_t alignment);
-		// void DeallocateAligned(void* ptr);
+		void* AllocateAligned(std::size_t size, std::size_t alignment);
+
+		void DeallocateAligned(void* ptr);
 
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // HISIDIAN_ENGINE_CORE_MEMORY_H
+#endif // VELOPRA_ENGINE_CORE_MEMORY_H

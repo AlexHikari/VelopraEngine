@@ -1,4 +1,5 @@
 #include "VE_Utility.h"
+#include "VE_Logger.h"
 #include <algorithm>
 #include <cctype>
 #include <fstream>
@@ -62,7 +63,7 @@ namespace VelopraEngine {
 		bool ReadTextFile(const std::string& filepath, std::string& outContent) {
 			std::ifstream file(filepath, std::ios::binary | std::ios::ate);
 			if (!file) {
-				//VELOPRA_CORE_ERROR("Unable to open file for reading: {}", filepath);
+				VELOPRA_CORE_ERROR("Unable to open file for reading: {}", filepath);
 				return false;
 			}
 
@@ -76,7 +77,7 @@ namespace VelopraEngine {
 				return true;
 			}
 			else {
-				//VELOPRA_CORE_ERROR("Failed to read from file: {}", filepath);
+				VELOPRA_CORE_ERROR("Failed to read from file: {}", filepath);
 				return false;
 			}
 		}
@@ -84,13 +85,13 @@ namespace VelopraEngine {
 		bool WriteTextFile(const std::string& filepath, const std::string& content) {
 			std::ofstream file(filepath);
 			if (!file) {
-				//VELOPRA_CORE_ERROR("Unable to open file for writing: {}", filepath);
+				VELOPRA_CORE_ERROR("Unable to open file for writing: {}", filepath);
 				return false;
 			}
 
 			file.write(content.data(), content.size());
 			if (!file) {
-				//VELOPRA_CORE_ERROR("Failed to write to file: {}", filepath);
+				VELOPRA_CORE_ERROR("Failed to write to file: {}", filepath);
 				return false;
 			}
 
