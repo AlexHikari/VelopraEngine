@@ -2,6 +2,7 @@
 #define VELOPRA_ENGINE_CORE_MATH_H
 
 #include "VE_Types.h"
+#include "VE_Logger.h"
 
 #include <cmath>
 
