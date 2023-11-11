@@ -28,3 +28,5 @@ private:
 
 	void SetupMesh();
 };
+
+#endif // VELOPRA_MESH_H

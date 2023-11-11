@@ -1,6 +1,5 @@
 #include "Shader.h"
-#include "VE_Logger.h"
-#include <iostream>
+#include "pch.h"
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
 	std::string vertexSrc = ReadFile(vertexPath);
@@ -91,4 +90,8 @@ std::string Shader::ReadFile(const std::string& filepath) {
 	std::stringstream sstr;
 	sstr << fileStream.rdbuf();
 	return sstr.str();
+}
+
+void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix) {
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 }

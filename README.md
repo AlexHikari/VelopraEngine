@@ -1,14 +1,18 @@
 # Velopra Engine
 
-The Velopra Engine is a lightweight, high-performance game engine designed for the development of both 2D and 3D games. It offers a powerful suite of tools and a robust core for mathematics and memory management that underpin the graphics and physics systems necessary for modern game development.
+The Velopra Engine is a lightweight, high-performance game engine designed for the development of both 2D and 3D games. It offers a powerful suite of tools and a robust core for mathematics, memory management, rendering, and more, essential for modern game development.
 
 ## Core Features
 
 - Vector2 and Vector3 structures for 2D/3D mathematical computations.
 - Matrix4 structure for affine transformations and projections.
 - Inline arithmetic operations for vectors and matrices for performance-critical applications.
-- Basic memory management utilities for dynamic allocation and deallocation.
+- Basic memory management utilities for dynamic allocation, deallocation, and aligned memory operations.
 - Integrated logging system for error reporting and debugging.
+- Efficient OpenGL-based rendering module supporting shader management, mesh processing, and texture handling.
+- Shader class for loading, compiling, and using GLSL shaders.
+- Mesh class for handling vertex data and rendering meshes.
+- Basic model class for managing 3D models and their constituent meshes (TODO: Complete implementation).
 
 ## Getting Started
 
@@ -16,19 +20,18 @@ The Velopra Engine is a lightweight, high-performance game engine designed for t
 
 Before you begin, ensure you have the following installed:
 - A C++17 compliant compiler (e.g., GCC, Clang, MSVC)
-- [CMake](https://cmake.org/download/) for the build process management
+- [CMake](https://cmake.org/download/) for build process management
 - A package manager like [vcpkg](https://github.com/microsoft/vcpkg) (optional, for managing dependencies)
 
 ### Dependencies
 
-The Velopra Engine uses `spdlog` for logging. If you are using vcpkg, you can install `spdlog` as follows:
+The Velopra Engine uses `spdlog` for logging, `GLEW`, `GLFW` and `GLM` for rendering, and `Assimp` for model loading. If you are using vcpkg, you can install these dependencies as follows:
 
 ```bash
-vcpkg install spdlog
+vcpkg install spdlog glew glfw3 assimp glm
 ```
 
-[TODO]
-If you're not using a package manager, make sure to include the spdlog library in your project or add the necessary submodules if you're using Git.
+f you're not using a package manager, ensure you include the necessary libraries in your project.
 
 ### Building the Project
 
@@ -44,29 +47,11 @@ make
 ```
 
 ### Usage
-
-To use the Velopra Engine in your project, include the core header files in your source and link against the Velopra Engine library. Here is a simple example:
-
-```cpp
-#include "VelopraEngine/Core/Math.h"
-
-int main() {
-    using namespace VelopraEngine::Core;
-    
-    Vector3 position(1.0f, 2.0f, 3.0f);
-    Vector3 velocity(0.1f, 0.2f, 0.3f);
-    float deltaTime = 1.0f / 60.0f;
-    
-    // Update position using Euler integration
-    position = position + velocity * deltaTime;
-    
-    return 0;
-}
-```
+To use the Velopra Engine in your project, include the core and rendering header files in your source and link against the Velopra Engine library.
 
 ### Contributing
 
-Right now contributions are closed but will be opened in the future as the engine expands!
+Currently, contributions are closed but will be opened in the future as the engine expands!
 
 ### License
 
@@ -74,4 +59,11 @@ Velopra Engine is released under the MIT License. See the LICENSE file for more 
 
 ### Distribution
 
-[TODO] For users who prefer not to build from source, we provide pre-compiled binaries for each release on the 
+Pre-compiled binaries for each release will be provided soon. Stay tuned!
+
+### Roadmap
+
+- Complete the model class implementation for 3D model handling.
+- Integrate support for multiple rendering backends.
+- Develop a comprehensive scene graph and entity-component system.
+- Expand the engine's toolset for physics, audio, and AI.

@@ -1,10 +1,13 @@
+#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+#endif
+
 #include "stb_image.h"
 
 #include "OpenGLRenderer.h"
-#include <iostream>
+#include "pch.h"
 
-OpenGLRenderer::OpenGLRenderer() : window(nullptr) {
+OpenGLRenderer::OpenGLRenderer() : window(nullptr), shader(nullptr), model(nullptr) {
 	// Constructor logic is usually empty
 }
 
@@ -12,6 +15,10 @@ OpenGLRenderer::~OpenGLRenderer() {
 	for (auto& pair : textureCache) {
 		glDeleteTextures(1, &pair.second);
 	}
+
+	delete shader;
+	delete model;
+
 	Shutdown();
 }
 
@@ -45,7 +52,8 @@ void OpenGLRenderer::Initialize() {
 		return;
 	}
 
-	// Additional OpenGL setup can be done here...
+	shader = new Shader("path/to/vertex.shader", "path/to/fragment.shader");
+	model = new Model("path/to/model.obj", *this);
 }
 
 void OpenGLRenderer::Shutdown() {
@@ -63,7 +71,24 @@ void OpenGLRenderer::BeginFrame() {
 }
 
 void OpenGLRenderer::RenderFrame() {
-	// Bind shader programs, set uniforms, bind VAOs, and draw
+	// Clear the screen
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Bind shader
+	shader->Bind();
+
+	// Example: Set a uniform
+	glm::mat4 modelMatrix = glm::mat4(1.0f); // Identity matrix for now
+	shader->SetUniformMat4f("u_Model", modelMatrix);
+
+	// More uniforms like view and projection matrices would be set here
+
+	// Draw the model
+	model->Draw();
+
+	// Unbind shader
+	shader->Unbind();
 }
 
 void OpenGLRenderer::EndFrame() {
@@ -102,7 +127,7 @@ GLuint OpenGLRenderer::LoadTexture(const std::string& filePath) {
 	// Upload the texture data
 	GLenum format = (nrChannels == 3) ? GL_RGB : GL_RGBA;
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D); // Generate mipmaps for the texture
+	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(data);
 	textureCache[filePath] = textureID;
 
@@ -113,5 +138,5 @@ bool OpenGLRenderer::WindowShouldClose() const {
 	if (window) {
 		return glfwWindowShouldClose(window);
 	}
-	return true; // If no window exists, signal to close
+	return true;
 }
