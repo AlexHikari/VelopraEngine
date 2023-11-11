@@ -1,5 +1,5 @@
-#ifndef VELOPRA_MODEL_H
-#define VELOPRA_MODEL_H
+#ifndef VELOPRA_ENGINE_MODEL_H
+#define VELOPRA_ENGINE_MODEL_H
 
 #include "Mesh.h"
 #include <assimp/Importer.hpp>
@@ -27,4 +27,4 @@ private:
 	std::vector<GLuint> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName);
 };
 
-#endif // VELOPRA_MODEL_H
+#endif // VELOPRA_ENGINE_MODEL_H

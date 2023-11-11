@@ -1,5 +1,5 @@
-#ifndef VELOPRA_SHADER_H
-#define VELOPRA_SHADER_H
+#ifndef VELOPRA_ENGINE_SHADER_H
+#define VELOPRA_ENGINE_SHADER_H
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -26,4 +26,4 @@ private:
 	std::string ReadFile(const std::string& filepath);
 };
 
-#endif // VELOPRA_SHADER_H
+#endif // VELOPRA_ENGINE_SHADER_H

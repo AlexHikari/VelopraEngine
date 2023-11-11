@@ -1,6 +1,6 @@
 // pch.h
-#ifndef RENDERING_PCH_H
-#define RENDERING_PCH_H
+#ifndef VELOPRA_ENGINE_RENDERING_PCH_H
+#define VELOPRA_ENGINE_RENDERING_PCH_H
 
 // Standard Library headers
 #include <vector>
@@ -25,4 +25,4 @@
 #include "VE_Logger.h"
 #include "VE_Utility.h"
 
-#endif // RENDERING_PCH_H
+#endif // VELOPRA_ENGINE_RENDERING_PCH_H

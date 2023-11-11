@@ -28,4 +28,4 @@ private:
 	Model* model;
 };
 
-#endif // OPENGL_RENDERER_H
+#endif // VELOPRA_ENGINE_OPENGL_RENDERER_H
