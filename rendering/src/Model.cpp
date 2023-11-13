@@ -100,3 +100,11 @@ std::vector<GLuint> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType t
 	}
 	return textures;
 }
+
+void Model::SetTransform(const Transform& transform) {
+	this->transform = transform;
+}
+
+Transform& Model::GetTransform() {
+	return transform;
+}

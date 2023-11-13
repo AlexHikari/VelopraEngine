@@ -7,6 +7,7 @@
 #include <string>
 #include "Shader.h"
 #include "Model.h"
+#include "Camera.h"
 
 class OpenGLRenderer {
 public:
@@ -20,12 +21,16 @@ public:
 	void EndFrame();
 	GLuint LoadTexture(const std::string& filePath);
 	bool WindowShouldClose() const;
+	void UpdateProjectionMatrix(int width, int height);
 
 private:
 	GLFWwindow* window;
 	std::unordered_map<std::string, GLuint> textureCache;
 	Shader* shader;
 	Model* model;
+	Camera* camera;
+	glm::mat4 projectionMatrix;
+	float aspectRatio;
 };
 
 #endif // VELOPRA_ENGINE_OPENGL_RENDERER_H

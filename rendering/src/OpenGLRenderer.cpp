@@ -3,12 +3,19 @@
 #endif
 
 #include "stb_image.h"
-
 #include "OpenGLRenderer.h"
 #include "pch.h"
 
-OpenGLRenderer::OpenGLRenderer() : window(nullptr), shader(nullptr), model(nullptr) {
-	// Constructor logic is usually empty
+OpenGLRenderer* globalRendererInstance = nullptr;
+
+void GLFWWindowSizeCallback(GLFWwindow* window, int width, int height) {
+	if (globalRendererInstance) {
+		globalRendererInstance->UpdateProjectionMatrix(width, height);
+	}
+}
+
+OpenGLRenderer::OpenGLRenderer() : window(nullptr), shader(nullptr), model(nullptr), camera(nullptr) {
+	globalRendererInstance = this;
 }
 
 OpenGLRenderer::~OpenGLRenderer() {
@@ -18,6 +25,9 @@ OpenGLRenderer::~OpenGLRenderer() {
 
 	delete shader;
 	delete model;
+	delete camera;
+	
+	globalRendererInstance = nullptr;
 
 	Shutdown();
 }
@@ -51,9 +61,14 @@ void OpenGLRenderer::Initialize() {
 		VELOPRA_CORE_ERROR("Failed to initialize GLEW");
 		return;
 	}
-
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	shader = new Shader("path/to/vertex.shader", "path/to/fragment.shader");
 	model = new Model("path/to/model.obj", *this);
+
+	glfwSetWindowSizeCallback(window, GLFWWindowSizeCallback);
+
+	aspectRatio = 800.0f / 600.0f;
+	UpdateProjectionMatrix(800,600);
 }
 
 void OpenGLRenderer::Shutdown() {
@@ -78,11 +93,16 @@ void OpenGLRenderer::RenderFrame() {
 	// Bind shader
 	shader->Bind();
 
-	// Example: Set a uniform
-	glm::mat4 modelMatrix = glm::mat4(1.0f); // Identity matrix for now
-	shader->SetUniformMat4f("u_Model", modelMatrix);
+	// Create view model and projection matrices
+	glm::mat4 view = camera->GetViewMatrix();
+	glm::mat4 modelMatrix = model->GetTransform().GetModelMatrix();
+	// Use the already updated projection matrix
+	glm::mat4 projection = projectionMatrix;
 
-	// More uniforms like view and projection matrices would be set here
+	// Set uniforms
+	shader->SetUniformMat4f("u_Model", modelMatrix);
+	shader->SetUniformMat4f("u_View", view);
+	shader->SetUniformMat4f("u_Projection", projection);
 
 	// Draw the model
 	model->Draw();
@@ -139,4 +159,12 @@ bool OpenGLRenderer::WindowShouldClose() const {
 		return glfwWindowShouldClose(window);
 	}
 	return true;
+}
+
+void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
+
+	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+	// Update viewport as well
+	glViewport(0, 0, width, height);
 }

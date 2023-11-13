@@ -2,6 +2,7 @@
 #define VELOPRA_ENGINE_MODEL_H
 
 #include "Mesh.h"
+#include "Transform.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -15,6 +16,8 @@ class Model {
 public:
 	Model(const std::string& path, OpenGLRenderer& renderer);
 	void Draw() const;
+	void SetTransform(const Transform& transform);
+	Transform& GetTransform();
 
 private:
 	std::vector<Mesh> meshes;
@@ -25,6 +28,8 @@ private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<GLuint> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName);
+	Transform transform;
+
 };
 
 #endif // VELOPRA_ENGINE_MODEL_H
