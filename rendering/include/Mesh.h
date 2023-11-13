@@ -1,5 +1,5 @@
-#ifndef VELOPRA_MESH_H
-#define VELOPRA_MESH_H
+#ifndef VELOPRA_ENGINE_MESH_H
+#define VELOPRA_ENGINE_MESH_H
 
 #include <GL/glew.h>
 #include <vector>
@@ -28,3 +28,5 @@ private:
 
 	void SetupMesh();
 };
+
+#endif // VELOPRA_ENGINE_MESH_H

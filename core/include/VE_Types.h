@@ -1,4 +1,3 @@
-#pragma once
 #ifndef VELOPRA_ENGINE_CORE_TYPES_H
 #define VELOPRA_ENGINE_CORE_TYPES_H
 

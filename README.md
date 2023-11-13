@@ -25,10 +25,10 @@ Before you begin, ensure you have the following installed:
 
 ### Dependencies
 
-The Velopra Engine uses `spdlog` for logging, `GLEW` and `GLFW` for rendering, and `Assimp` for model loading. If you are using vcpkg, you can install these dependencies as follows:
+The Velopra Engine uses `spdlog` for logging, `GLEW`, `GLFW` and `GLM` for rendering, and `Assimp` for model loading. If you are using vcpkg, you can install these dependencies as follows:
 
 ```bash
-vcpkg install spdlog glew glfw3 assimp
+vcpkg install spdlog glew glfw3 assimp glm
 ```
 
 f you're not using a package manager, ensure you include the necessary libraries in your project.

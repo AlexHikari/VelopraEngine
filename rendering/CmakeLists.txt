@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(VelopraRenderer)
 
+# Specify the C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Precompiled header file
+set(PRECOMPILED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
+
 # Source files
 file(GLOB_RECURSE RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -13,6 +20,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(assimp CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 
 # Include directories for this target
 target_include_directories(VelopraRenderer PUBLIC
@@ -28,4 +36,8 @@ target_link_libraries(VelopraRenderer
     OpenGL::GL 
     glfw
     assimp::assimp
+    glm::glm
 )
+
+# Enable precompiled headers
+target_precompile_headers(VelopraRenderer PRIVATE ${PRECOMPILED_HEADER})
