@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_CORE_UTILITY_H
-#define VELOPRA_ENGINE_CORE_UTILITY_H
+#ifndef VE_CORE_UTILITY_H
+#define VE_CORE_UTILITY_H
 
 #include <string>
 #include <vector>
@@ -40,4 +40,4 @@ namespace VelopraEngine {
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // VELOPRA_ENGINE_CORE_UTILITY_H
+#endif // VE_CORE_UTILITY_H

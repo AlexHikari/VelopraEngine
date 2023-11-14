@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_CORE_MATH_H
-#define VELOPRA_ENGINE_CORE_MATH_H
+#ifndef VE_CORE_MATH_H
+#define VE_CORE_MATH_H
 
 #include "VE_Types.h"
 #include "VE_Logger.h"
@@ -204,4 +204,4 @@ namespace VelopraEngine {
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // VELOPRA_ENGINE_CORE_MATH_H
+#endif // VE_CORE_MATH_H

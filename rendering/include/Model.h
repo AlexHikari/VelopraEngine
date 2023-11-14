@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_MODEL_H
-#define VELOPRA_ENGINE_MODEL_H
+#ifndef VE_MODEL_H
+#define VE_MODEL_H
 
 #include "Mesh.h"
 #include "Transform.h"
@@ -32,4 +32,4 @@ private:
 
 };
 
-#endif // VELOPRA_ENGINE_MODEL_H
+#endif // VE_MODEL_H

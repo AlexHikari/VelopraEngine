@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_CAMERA_H
-#define VELOPRA_ENGINE_CAMERA_H
+#ifndef VE_CAMERA_H
+#define VE_CAMERA_H
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -41,4 +41,4 @@ private:
 	void updateCameraVectors();
 };
 
-#endif //VELOPRA_ENGINE_CAMERA_H
+#endif //VE_CAMERA_H

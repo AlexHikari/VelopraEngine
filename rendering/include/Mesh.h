@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_MESH_H
-#define VELOPRA_ENGINE_MESH_H
+#ifndef VE_MESH_H
+#define VE_MESH_H
 
 #include <GL/glew.h>
 #include <vector>
@@ -18,6 +18,13 @@ public:
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<GLuint>& indices);
 	~Mesh();
 
+	Mesh(Mesh&& other) noexcept;
+	Mesh& operator=(Mesh&&) noexcept;
+
+
+	Mesh(const Mesh&) = delete;
+	Mesh& operator=(const Mesh&) = delete;
+
 	void Draw() const;
 
 private:
@@ -29,4 +36,4 @@ private:
 	void SetupMesh();
 };
 
-#endif // VELOPRA_ENGINE_MESH_H
+#endif // VE_MESH_H

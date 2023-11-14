@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_CORE_MEMORY_H
-#define VELOPRA_ENGINE_CORE_MEMORY_H
+#ifndef VE_CORE_MEMORY_H
+#define VE_CORE_MEMORY_H
 
 #include <cstddef>
 
@@ -19,4 +19,4 @@ namespace VelopraEngine {
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // VELOPRA_ENGINE_CORE_MEMORY_H
+#endif // VE_CORE_MEMORY_H

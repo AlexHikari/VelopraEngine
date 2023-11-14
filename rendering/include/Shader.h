@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_SHADER_H
-#define VELOPRA_ENGINE_SHADER_H
+#ifndef VE_SHADER_H
+#define VE_SHADER_H
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -18,6 +18,7 @@ public:
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 	// Add more uniform functions as needed
+	bool ValidateProgram();
 
 private:
 	GLuint programID;
@@ -26,4 +27,4 @@ private:
 	std::string ReadFile(const std::string& filepath);
 };
 
-#endif // VELOPRA_ENGINE_SHADER_H
+#endif // VE_SHADER_H

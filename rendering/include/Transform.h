@@ -1,6 +1,6 @@
 // Transform.h
-#ifndef VELOPRA_ENGINE_TRANSFORM_H
-#define VELOPRA_ENGINE_TRANSFORM_H
+#ifndef VE_TRANSFORM_H
+#define VE_TRANSFORM_H
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -20,4 +20,4 @@ private:
 	glm::vec3 scale;
 };
 
-#endif // VELOPRA_ENGINE_TRANSFORM_H
+#endif // VE_TRANSFORM_H
