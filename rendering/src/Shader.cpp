@@ -30,6 +30,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
 	glDetachShader(programID, fragmentShader);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	VELOPRA_CORE_INFO("Compiling and linking shader: vertex: {}, fragment: {}", vertexPath, fragmentPath);
 }
 
 Shader::~Shader() {
@@ -94,4 +95,19 @@ std::string Shader::ReadFile(const std::string& filepath) {
 
 void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix) {
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
+}
+
+bool Shader::ValidateProgram() {
+	glValidateProgram(programID);
+	GLint isValid = 0;
+	glGetProgramiv(programID, GL_VALIDATE_STATUS, &isValid);
+	if (isValid == GL_FALSE) {
+		GLint maxLength = 0;
+		glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
+		VELOPRA_CORE_ERROR("Shader validation failure: {}", infoLog.data());
+		return false;
+	}
+	return true;
 }

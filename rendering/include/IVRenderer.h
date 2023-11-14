@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_RENDERER_IRENDERER_H
-#define VELOPRA_ENGINE_RENDERER_IRENDERER_H
+#ifndef VE_IRENDERER_H
+#define VE_IRENDERER_H
 
 namespace VelopraEngine {
 	namespace Renderer {
@@ -18,4 +18,4 @@ namespace VelopraEngine {
 	} // namespace Renderer
 } // namespace VelopraEngine
 
-#endif // VELOPRA_ENGINE_RENDERER_IRENDERER_H
+#endif // VE_IRENDERER_H

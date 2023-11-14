@@ -6,6 +6,9 @@ project(VelopraCore)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Precompiled header file
+set(PRECOMPILED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
+
 # Find the spdlog package
 find_package(spdlog CONFIG REQUIRED)
 
@@ -21,3 +24,5 @@ target_link_libraries(VelopraCore PRIVATE spdlog::spdlog)
 
 # Setup include directory for users of the Core module
 target_include_directories(VelopraCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_precompile_headers(VelopraCore PRIVATE ${PRECOMPILED_HEADER})

@@ -1,8 +1,8 @@
-#ifndef VELOPRA_ENGINE_CORE_LOGGER_H
-#define VELOPRA_ENGINE_CORE_LOGGER_H
+#ifndef VE_CORE_LOGGER_H
+#define VE_CORE_LOGGER_H
 
 #include <spdlog/spdlog.h>
-#include <spdlog/async.h>  // Include for spdlog's async logging features
+#include <spdlog/async.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <memory>
 
@@ -38,4 +38,4 @@ namespace VelopraEngine {
 #define VELOPRA_ERROR(...)        ::VelopraEngine::Core::Logger::GetClientLogger()->error(__VA_ARGS__)
 #define VELOPRA_CRITICAL(...)     ::VelopraEngine::Core::Logger::GetClientLogger()->critical(__VA_ARGS__)
 
-#endif // VELOPRA_ENGINE_CORE_LOGGER_H
+#endif // VE_CORE_LOGGER_H

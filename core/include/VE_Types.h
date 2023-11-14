@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_CORE_TYPES_H
-#define VELOPRA_ENGINE_CORE_TYPES_H
+#ifndef VE_CORE_TYPES_H
+#define VE_CORE_TYPES_H
 
 #include <cstdint>
 
@@ -20,4 +20,4 @@ namespace VelopraEngine {
 	} // namespace Core
 } // namespace VelopraEngine
 
-#endif // VELOPRA_ENGINE_CORE_TYPES_H
+#endif // VE_CORE_TYPES_H

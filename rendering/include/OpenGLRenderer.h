@@ -1,5 +1,5 @@
-#ifndef VELOPRA_ENGINE_OPENGL_RENDERER_H
-#define VELOPRA_ENGINE_OPENGL_RENDERER_H
+#ifndef VE_OPENGL_RENDERER_H
+#define VE_OPENGL_RENDERER_H
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -31,6 +31,10 @@ private:
 	Camera* camera;
 	glm::mat4 projectionMatrix;
 	float aspectRatio;
+
+	void RenderTestTriangle();
+	void RenderTestCube();
+	void LogMatrix(const std::string& name, const glm::mat4& mat);
 };
 
-#endif // VELOPRA_ENGINE_OPENGL_RENDERER_H
+#endif // VE_OPENGL_RENDERER_H

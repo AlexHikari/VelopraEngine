@@ -4,17 +4,18 @@
 
 Model::Model(const std::string& path, OpenGLRenderer& renderer) : renderer(&renderer) {
 	LoadModel(path);
+	VELOPRA_CORE_INFO("Loading model: {}", path);
 }
 
-void Model::Draw() const {
-	for (const auto& mesh : meshes) {
+void Model::Draw() const{
+	for (auto& mesh : meshes) {
 		mesh.Draw();
 	}
 }
 
 void Model::LoadModel(const std::string& path) {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_JoinIdenticalVertices);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		VELOPRA_CORE_ERROR("Assimp error: {}", importer.GetErrorString());
@@ -23,12 +24,13 @@ void Model::LoadModel(const std::string& path) {
 	directory = path.substr(0, path.find_last_of('/'));
 
 	ProcessNode(scene->mRootNode, scene);
+	VELOPRA_CORE_INFO("Model loaded");
 }
 
 void Model::ProcessNode(aiNode* node, const aiScene* scene) {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(ProcessMesh(mesh, scene));
+		meshes.push_back(std::move(ProcessMesh(mesh, scene)));
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
@@ -84,7 +86,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 		// More texture types can be loaded if needed
 	}
 
-	return Mesh(vertices, indices);
+	return Mesh(std::move(vertices), std::move(indices));
 }
 
 std::vector<GLuint> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName) {
@@ -94,6 +96,8 @@ std::vector<GLuint> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType t
 		mat->GetTexture(type, i, &str);
 		std::string filename = std::string(str.C_Str());
 		filename = directory + '/' + filename;
+
+		VELOPRA_CORE_INFO("Loading texture: {}", filename);
 
 		GLuint textureID = renderer->LoadTexture(filename);
 		textures.push_back(textureID);
