@@ -1,10 +1,7 @@
 #ifndef VE_IRENDERER_H
 #define VE_IRENDERER_H
 
-namespace VelopraEngine {
-	namespace Renderer {
-
-		class IRenderer {
+class IRenderer {
 		public:
 			virtual ~IRenderer() = default;
 
@@ -13,9 +10,6 @@ namespace VelopraEngine {
 			virtual void BeginFrame() = 0;
 			virtual void RenderFrame() = 0;
 			virtual void EndFrame() = 0;
-		};
-
-	} // namespace Renderer
-} // namespace VelopraEngine
+};
 
 #endif // VE_IRENDERER_H

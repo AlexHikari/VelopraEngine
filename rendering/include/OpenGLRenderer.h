@@ -23,6 +23,13 @@ public:
 	bool WindowShouldClose() const;
 	void UpdateProjectionMatrix(int width, int height);
 
+	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
+	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
+	// Method to register callbacks
+	void RegisterInputCallbacks();
+
 private:
 	GLFWwindow* window;
 	std::unordered_map<std::string, GLuint> textureCache;
@@ -31,10 +38,6 @@ private:
 	Camera* camera;
 	glm::mat4 projectionMatrix;
 	float aspectRatio;
-
-	void RenderTestTriangle();
-	void RenderTestCube();
-	void LogMatrix(const std::string& name, const glm::mat4& mat);
 };
 
 #endif // VE_OPENGL_RENDERER_H

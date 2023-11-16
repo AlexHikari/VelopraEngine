@@ -1,0 +1,16 @@
+# input/CMakeLists.txt
+cmake_minimum_required(VERSION 3.8)
+project(VelopraInputSystem)
+
+# Automatically add all source and header files
+file(GLOB_RECURSE INPUT_SYSTEM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE INPUT_SYSTEM_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+
+# Create the InputSystem library
+add_library(VelopraInputSystem ${INPUT_SYSTEM_SOURCE_FILES} ${INPUT_SYSTEM_HEADER_FILES})
+
+# Include directories
+target_include_directories(VelopraInputSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Link with Core module
+target_link_libraries(VelopraInputSystem PRIVATE VelopraCore)

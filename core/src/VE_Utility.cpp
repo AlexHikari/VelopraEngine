@@ -1,5 +1,5 @@
 #include "VE_Utility.h"
-#include "VE_Logger.h"
+#include "VE_LoggerMacros.h"
 #include <algorithm>
 #include <cctype>
 #include <fstream>

@@ -1,12 +1,20 @@
 #include "VE_Core.h"
 
+Core::Core()
+	: eventQueue(&EventQueue::Instance()), eventBus(&EventBus::Instance()) {
+}
+
 Core& Core::Instance() {
 	static Core instance;
 	return instance;
 }
 
-EventQueue& Core::GetEventQueue() {
+EventQueue* Core::GetEventQueue() {
 	return eventQueue;
+}
+
+EventBus* Core::GetEventBus() {
+	return eventBus;
 }
 
 void Core::PushLayer(Layer* layer) {
