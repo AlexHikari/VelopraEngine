@@ -14,9 +14,6 @@ public:
 	void PopLayer(Layer* layer);
 	void PopOverlay(Layer* overlay);
 
-	void MoveLayerToFront(Layer* layer);
-	void MoveLayerToBack(Layer* layer);
-
 	typedef std::vector<Layer*>::iterator iterator;
 	typedef std::vector<Layer*>::reverse_iterator reverse_iterator;
 
@@ -27,7 +24,7 @@ public:
 
 private:
 	std::vector<Layer*> layers;
-	unsigned int layerInsertIndex = 0;
+	unsigned int layerInsertIndex;
 };
 
 #endif // VE_LAYER_STACK_H

@@ -1,5 +1,5 @@
-#include "Model.h"
 #include "pch.h"
+#include "Model.h"
 #include "OpenGLRenderer.h"
 
 Model::Model(const std::string& path, OpenGLRenderer& renderer) : renderer(&renderer) {

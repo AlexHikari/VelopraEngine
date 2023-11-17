@@ -1,12 +1,9 @@
 #include "VE_Logger.h"
 
-namespace VelopraEngine {
-	namespace Core {
+std::shared_ptr<spdlog::logger> Logger::s_CoreLogger;
+std::shared_ptr<spdlog::logger> Logger::s_ClientLogger;
 
-		std::shared_ptr<spdlog::logger> Logger::s_CoreLogger;
-		std::shared_ptr<spdlog::logger> Logger::s_ClientLogger;
-
-		void Logger::Init() {
+void Logger::Init() {
 			// Initialize spdlog's async logging feature (creates a thread pool)
 			spdlog::init_thread_pool(8192, 1); // Queue size and number of threads
 
@@ -22,7 +19,4 @@ namespace VelopraEngine {
 			s_ClientLogger->flush_on(spdlog::level::err);
 
 			spdlog::set_pattern("%^[%T] %n: %v%$"); // Set the pattern for the logging output
-		}
-
-	} // namespace Core
-} // namespace VelopraEngine
+}

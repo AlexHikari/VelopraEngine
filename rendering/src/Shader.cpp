@@ -85,7 +85,7 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 std::string Shader::ReadFile(const std::string& filepath) {
 	std::ifstream fileStream(filepath, std::ios::in);
 	if (!fileStream.is_open()) {
-		VELOPRA_CORE_ERROR("Could not open file {}", filepath);
+		//VELOPRA_CORE_ERROR("Could not open file {}", filepath);
 		return "";
 	}
 	std::stringstream sstr;

@@ -2,16 +2,19 @@
 #define VE_CORE_H
 
 #include "VE_EventQueue.h"
+#include "VE_EventBus.h"
 #include "VE_Layer.h"
 #include "VE_LayerStack.h"
 
 class Core {
 public:
 	static Core& Instance();
-	EventQueue& GetEventQueue();
 
-	Core(Core const&) = delete;
-	void operator=(Core const&) = delete;
+	EventQueue* GetEventQueue();
+	EventBus* GetEventBus();
+
+	Core(const Core&) = delete;
+	Core& operator=(const Core&) = delete;
 
 	void PushLayer(Layer* layer);
 	void PushOverlay(Layer* overlay);
@@ -22,8 +25,9 @@ public:
 	LayerStack::reverse_iterator rend();
 
 private:
-	Core() = default;
-	EventQueue eventQueue;
+	Core();
+	EventQueue* eventQueue;
+	EventBus* eventBus;
 	LayerStack layerStack;
 };
 

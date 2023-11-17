@@ -6,23 +6,17 @@ project(VelopraCore)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Precompiled header file
-set(PRECOMPILED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
-
 # Find the spdlog package
-find_package(spdlog CONFIG REQUIRED)
 
 # Automatically add all files in the specified directory to a target
 file(GLOB_RECURSE CORE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE CORE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 # Add library target for the Core module with the collected source files
+find_package(spdlog REQUIRED)
 add_library(VelopraCore ${CORE_SOURCE_FILES} ${CORE_HEADER_FILES})
-
-# Link the spdlog library to the Core module
-target_link_libraries(VelopraCore PRIVATE spdlog::spdlog)
-
-# Setup include directory for users of the Core module
+target_link_libraries(VelopraCore PUBLIC spdlog::spdlog)
 target_include_directories(VelopraCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_precompile_headers(VelopraCore PRIVATE ${PRECOMPILED_HEADER})
+get_target_property(CORE_LINK_LIBRARIES VelopraCore LINK_LIBRARIES)
+message(STATUS "Core link libraries: ${CORE_LINK_LIBRARIES}")

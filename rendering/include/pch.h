@@ -9,6 +9,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 // ... any other standard library headers ...
 
 // External libraries
@@ -22,7 +23,7 @@
 
 // Internal headers
 // Include any internal headers that are used across multiple files
-#include "VE_Logger.h"
-#include "VE_Utility.h"
+#include "VE_LoggerMacros.h"
+#include "VE_Core.h"
 
-#endif // VE_RENDERING_PCH_H
+#endif

@@ -1,7 +1,7 @@
 #ifndef VE_WINDOW_EVENT_H
 #define VE_WINDOW_EVENT_H
 
-#include "Event.h"
+#include "VE_Event.h"
 
 class WindowResizeEvent : public Event {
 public:

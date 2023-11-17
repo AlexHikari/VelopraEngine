@@ -1,10 +1,11 @@
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
-#endif
 
-#include "stb_image.h"
-#include "OpenGLRenderer.h"
 #include "pch.h"
+#include "OpenGLRenderer.h"
+#include "stb_image.h"
+#include "VE_KeyboardEvent.h"
+#include "VE_MouseEvent.h"
 
 OpenGLRenderer* globalRendererInstance = nullptr;
 
@@ -14,7 +15,7 @@ void GLFWWindowSizeCallback(GLFWwindow* window, int width, int height) {
 	}
 }
 
-OpenGLRenderer::OpenGLRenderer() : window(nullptr), shader(nullptr), model(nullptr), camera(nullptr) {
+OpenGLRenderer::OpenGLRenderer() : window(nullptr), shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f), projectionMatrix(glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f)){
 	globalRendererInstance = this;
 }
 
@@ -47,7 +48,7 @@ void OpenGLRenderer::Initialize() {
 	// Create a windowed mode window and its OpenGL context
 	window = glfwCreateWindow(800, 600, "Hello World", nullptr, nullptr);
 	if (!window) {
-		VELOPRA_CORE_ERROR("Failed to create GLFW window");
+		//VELOPRA_CORE_ERROR("Failed to create GLFW window");
 		glfwTerminate();
 		return;
 	}
@@ -66,12 +67,19 @@ void OpenGLRenderer::Initialize() {
 	model = new Model("model.obj", *this);
 	model->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
-	glfwSetWindowSizeCallback(window, GLFWWindowSizeCallback);
-
 	aspectRatio = 800.0f / 600.0f;
+
+	RegisterInputCallbacks();
 	UpdateProjectionMatrix(800,600);
 	VELOPRA_CORE_INFO("OpenGL Renderer initialized successfully.");
 
+}
+
+void OpenGLRenderer::RegisterInputCallbacks() {
+	glfwSetKeyCallback(window, KeyCallback);
+	glfwSetCursorPosCallback(window, CursorPositionCallback);
+	glfwSetMouseButtonCallback(window, MouseButtonCallback);
+	glfwSetWindowSizeCallback(window, GLFWWindowSizeCallback);
 }
 
 void OpenGLRenderer::Shutdown() {
@@ -109,112 +117,9 @@ void OpenGLRenderer::RenderFrame() {
 	shader->SetUniformMat4f("u_Projection", projection);
 
 	model->Draw();
-	//RenderTestTriangle();
-	//RenderTestCube();
+
 	// Unbind shader
 	shader->Unbind();
-}
-
-void OpenGLRenderer::RenderTestTriangle() {
-	// Temporary vertices for a triangle
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, // left  
-		 0.5f, -0.5f, 0.0f, // right 
-		 0.0f,  0.5f, 0.0f  // top   
-	};
-
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	// Bind Vertex Array Object
-	glBindVertexArray(VAO);
-
-	// Copy vertices array in a buffer for OpenGL to use
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// Set the vertex attribute pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// Draw the triangle
-	VELOPRA_CORE_INFO("Drawing test triangle.");
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	// Unbind VAO and VBO
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// Clean up
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-}
-
-void OpenGLRenderer::RenderTestCube() {
-	// Temporary vertices for a cube
-	float vertices[] = {
-		// Front face
-		-0.5f, -0.5f,  0.5f,  // Bottom-left
-		 0.5f, -0.5f,  0.5f,  // Bottom-right
-		 0.5f,  0.5f,  0.5f,  // Top-right
-		-0.5f,  0.5f,  0.5f,  // Top-left
-
-		// Back face
-		-0.5f, -0.5f, -0.5f,  // Bottom-left
-		 0.5f, -0.5f, -0.5f,  // Bottom-right
-		 0.5f,  0.5f, -0.5f,  // Top-right
-		-0.5f,  0.5f, -0.5f,  // Top-left
-	};
-
-	unsigned int indices[] = {
-		// Front face
-		0, 1, 2, 2, 3, 0,
-		// Back face
-		4, 5, 6, 6, 7, 4,
-		// Left face
-		4, 0, 3, 3, 7, 4,
-		// Right face
-		1, 5, 6, 6, 2, 1,
-		// Top face
-		3, 2, 6, 6, 7, 3,
-		// Bottom face
-		4, 5, 1, 1, 0, 4
-	};
-
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	VELOPRA_CORE_INFO("Drawing test cube.");
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-}
-
-
-void OpenGLRenderer::LogMatrix(const std::string& name, const glm::mat4& mat) {
-	VELOPRA_CORE_INFO("{}: [ {:.2f}, {:.2f}, {:.2f}, {:.2f} ]", name, mat[0][0], mat[1][0], mat[2][0], mat[3][0]);
-	VELOPRA_CORE_INFO("    [ {:.2f}, {:.2f}, {:.2f}, {:.2f} ]", mat[0][1], mat[1][1], mat[2][1], mat[3][1]);
-	VELOPRA_CORE_INFO("    [ {:.2f}, {:.2f}, {:.2f}, {:.2f} ]", mat[0][2], mat[1][2], mat[2][2], mat[3][2]);
-	VELOPRA_CORE_INFO("    [ {:.2f}, {:.2f}, {:.2f}, {:.2f} ]", mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
 }
 
 void OpenGLRenderer::EndFrame() {
@@ -226,17 +131,17 @@ void OpenGLRenderer::EndFrame() {
 }
 
 GLuint OpenGLRenderer::LoadTexture(const std::string& filePath) {
-	VELOPRA_CORE_INFO("Loading texture: {}", filePath);
+	//VELOPRA_CORE_INFO("Loading texture: {}", filePath);
 	auto it = textureCache.find(filePath);
 	if (it != textureCache.end()) {
-		VELOPRA_CORE_TRACE("Texture loaded from cache");
+		//VELOPRA_CORE_TRACE("Texture loaded from cache");
 		return it->second;
 	}
 
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
 	if (!data) {
-		VELOPRA_CORE_ERROR("Failed to load texture: {}", filePath);
+		//VELOPRA_CORE_ERROR("Failed to load texture: {}", filePath);
 		return 0;
 	}
 
@@ -256,7 +161,7 @@ GLuint OpenGLRenderer::LoadTexture(const std::string& filePath) {
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(data);
 	textureCache[filePath] = textureID;
-	VELOPRA_CORE_INFO("Texture loaded successfully: {}", filePath);
+	//VELOPRA_CORE_INFO("Texture loaded successfully: {}", filePath);
 	return textureID;
 }
 
@@ -267,6 +172,47 @@ bool OpenGLRenderer::WindowShouldClose() const {
 	return true;
 }
 
+void OpenGLRenderer::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	std::shared_ptr<Event> event;
+
+	if (action == GLFW_PRESS) {
+		event = std::make_shared<KeyPressedEvent>(key, 0);
+	}
+	else if (action == GLFW_RELEASE) {
+		event = std::make_shared<KeyReleasedEvent>(key);
+	}
+	else if (action == GLFW_REPEAT) {
+		event = std::make_shared<KeyPressedEvent>(key, 1);
+	}
+
+	if (event) {
+		VELOPRA_CORE_TRACE("Posting event: {}", event->ToString());
+		Core::Instance().GetEventQueue()->PushEvent(event);
+	}
+}
+
+void OpenGLRenderer::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
+	auto event = std::make_shared<MouseMovedEvent>(static_cast<float>(xpos), static_cast<float>(ypos));
+	VELOPRA_CORE_TRACE("Posting event: {}", event->ToString());
+	Core::Instance().GetEventQueue()->PushEvent(event);
+}
+
+void OpenGLRenderer::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+	std::shared_ptr<Event> event;
+
+	if (action == GLFW_PRESS) {
+		event = std::make_shared<MouseButtonPressedEvent>(button);
+	}
+	else if (action == GLFW_RELEASE) {
+		event = std::make_shared<MouseButtonReleasedEvent>(button);
+	}
+
+	if (event) {
+		VELOPRA_CORE_TRACE("Posting event: {}", event->ToString());
+		Core::Instance().GetEventQueue()->PushEvent(event);
+	}
+}
+
 void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
 
 	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
@@ -274,3 +220,4 @@ void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
 	// Update viewport as well
 	glViewport(0, 0, width, height);
 }
+#endif
