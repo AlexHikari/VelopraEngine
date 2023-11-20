@@ -59,7 +59,9 @@ GLuint Shader::CompileShader(unsigned int type, const std::string& source) {
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<GLchar> infoLog(maxLength);
 		glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
-		VELOPRA_CORE_ERROR("Shader compilation failure: {}",infoLog.data());
+		VELOPRA_CORE_ERROR("Shader compilation failure in {} shader: {}",
+			(type == GL_VERTEX_SHADER ? "vertex" : "fragment"),
+			infoLog.data());
 		glDeleteShader(shader);
 		return 0;
 	}
@@ -85,7 +87,7 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 std::string Shader::ReadFile(const std::string& filepath) {
 	std::ifstream fileStream(filepath, std::ios::in);
 	if (!fileStream.is_open()) {
-		//VELOPRA_CORE_ERROR("Could not open file {}", filepath);
+		VELOPRA_CORE_ERROR("Could not open file {}", filepath);
 		return "";
 	}
 	std::stringstream sstr;

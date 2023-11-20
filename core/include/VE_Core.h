@@ -5,6 +5,7 @@
 #include "VE_EventBus.h"
 #include "VE_Layer.h"
 #include "VE_LayerStack.h"
+#include <chrono>
 
 class Core {
 public:
