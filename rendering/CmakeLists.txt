@@ -1,21 +1,38 @@
-# rendering/CMakeLists.txt
+# CMakeLists.txt
 cmake_minimum_required(VERSION 3.8)
 project(VelopraRenderer)
 
 # Precompiled header file
 set(PRECOMPILED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")
 
-# Automatically add all source and header files
-file(GLOB_RECURSE RENDERER_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB_RECURSE RENDERER_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+set(RENDERING_SOURCE_FILES
+    src/Camera.cpp
+    src/Mesh.cpp
+    src/Model.cpp
+    src/OpenGLRenderer.cpp
+    src/pch.cpp
+    src/Shader.cpp
+    src/Transform.cpp
+)
+set(RENDERING_HEADER_FILES
+    include/Camera.h
+    include/IVRenderer.h
+    include/IWindowSizeObserver.h
+    include/Mesh.h
+    include/Model.h
+    include/OpenGLRenderer.h
+    include/pch.h
+    include/Shader.h
+    include/stb_image.h
+    include/Transform.h
+)
 
 # Create the Renderer library
-add_library(VelopraRenderer ${RENDERER_SOURCE_FILES} ${RENDERER_HEADER_FILES})
+add_library(VelopraRenderer ${RENDERING_SOURCE_FILES} ${RENDERING_HEADER_FILES})
 
 # Find necessary packages
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(glfw3 3.3 REQUIRED)
 find_package(assimp REQUIRED)
 find_package(glm REQUIRED)
 
@@ -28,16 +45,13 @@ target_include_directories(VelopraRenderer PRIVATE
 target_include_directories(VelopraRenderer PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
 # Link with Core module and external libraries
 target_link_libraries(VelopraRenderer PRIVATE 
     VelopraCore
-    GLEW::GLEW 
+    GLEW::GLEW
     OpenGL::GL 
-    glfw
-    assimp::assimp
     glm::glm
+    assimp::assimp
 )
-
 # Enable precompiled headers
 target_precompile_headers(VelopraRenderer PRIVATE ${PRECOMPILED_HEADER})

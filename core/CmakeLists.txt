@@ -2,15 +2,35 @@
 cmake_minimum_required(VERSION 3.8)
 project(VelopraCore)
 
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Find the spdlog package
-
-# Automatically add all files in the specified directory to a target
-file(GLOB_RECURSE CORE_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB_RECURSE CORE_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+set(CORE_SOURCE_FILES
+    src/VE_Core.cpp
+    src/VE_EventBus.cpp
+    src/VE_EventQueue.cpp
+    src/VE_Layer.cpp
+    src/VE_LayerStack.cpp
+    src/VE_Logger.cpp
+    src/VE_Memory.cpp
+    src/VE_Utility.cpp
+)
+set(CORE_HEADER_FILES
+    include/VE_Core.h
+    include/VE_Event.h
+    include/VE_EventBus.h
+    include/VE_EventQueue.h
+    include/VE_EventSubscriber.h
+    include/VE_KeyboardEvent.h
+    include/VE_Layer.h
+    include/VE_LayerStack.h
+    include/VE_Logger.h
+    include/VE_LoggerMacros.h
+    include/VE_Math.h
+    include/VE_Memory.h
+    include/VE_MouseEvent.h
+    include/VE_Time.h
+    include/VE_Types.h
+    include/VE_Utility.h
+    include/VE_WindowEvent.h
+)
 
 # Add library target for the Core module with the collected source files
 find_package(spdlog REQUIRED)

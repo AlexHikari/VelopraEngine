@@ -2,36 +2,27 @@
 #define VE_OPENGL_RENDERER_H
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <unordered_map>
 #include <string>
 #include "Shader.h"
 #include "Model.h"
 #include "Camera.h"
+#include "IWindowSizeObserver.h"
 
-class OpenGLRenderer {
+class OpenGLRenderer : public IWindowSizeObserver {
 public:
 	OpenGLRenderer();
 	~OpenGLRenderer();
 
 	void Initialize();
-	void Shutdown();
 	void BeginFrame();
 	void RenderFrame();
-	void EndFrame();
 	GLuint LoadTexture(const std::string& filePath);
-	bool WindowShouldClose() const;
 	void UpdateProjectionMatrix(int width, int height);
 
-	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
-	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-
-	// Method to register callbacks
-	void RegisterInputCallbacks();
+	virtual void OnWindowSizeChanged(int width, int height) override;
 
 private:
-	GLFWwindow* window;
 	std::unordered_map<std::string, GLuint> textureCache;
 	Shader* shader;
 	Model* model;

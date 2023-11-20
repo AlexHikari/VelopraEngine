@@ -17,6 +17,7 @@ project("VelopraEngine")
 
 # Include subdirectories for each module
 add_subdirectory("core")
-add_subdirectory("rendering")
 add_subdirectory("input")
+add_subdirectory("rendering")
+add_subdirectory("ui")
 add_subdirectory("application")
