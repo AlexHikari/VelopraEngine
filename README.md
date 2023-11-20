@@ -1,37 +1,99 @@
 # Velopra Engine
 
-The Velopra Engine is a lightweight, high-performance game engine designed for the development of both 2D and 3D games. It offers a powerful suite of tools and a robust core for mathematics, memory management, rendering, and more, essential for modern game development.
+The Velopra Engine is a versatile, high-performance game engine designed for developing both 2D and 3D games. It offers a comprehensive suite of tools and a robust framework, including mathematics, memory management, rendering capabilities, and more, crucial for contemporary game development.
 
 ## Core Features
 
-- Vector2 and Vector3 structures for 2D/3D mathematical computations.
-- Matrix4 structure for affine transformations and projections.
-- Inline arithmetic operations for vectors and matrices for performance-critical applications.
-- Basic memory management utilities for dynamic allocation, deallocation, and aligned memory operations.
-- Integrated logging system for error reporting and debugging.
-- Efficient OpenGL-based rendering module supporting shader management, mesh processing, and texture handling.
-- Shader class for loading, compiling, and using GLSL shaders.
-- Mesh class for handling vertex data and rendering meshes.
-- Basic model class for managing 3D models and their constituent meshes (TODO: Complete implementation).
+- **Vector2 and Vector3 structures** for efficient 2D/3D mathematical computations.
+- **Matrix4 structure** for handling affine transformations and projections.
+- **Optimized arithmetic operations** for vectors and matrices, catering to performance-critical applications.
+- **Advanced memory management utilities** for dynamic allocation, deallocation, and aligned memory operations.
+- **Integrated logging system** for streamlined error reporting and debugging.
+- **Powerful OpenGL-based rendering module**, supporting shader management, mesh processing, texture handling, and more.
+- **Shader class** for efficient loading, compiling, and utilizing GLSL shaders.
+- **Mesh class** dedicated to managing vertex data and rendering meshes.
+- **Basic model class** for handling 3D models and their meshes, with ongoing enhancements for full implementation.
+
+## Core Components
+
+### Core Module (VelopraCore)
+- Central part of the engine, handling core functionalities.
+- Singleton Core class for managing the engine's main operations.
+- Manages event queue and event bus for event handling and dispatching.
+- Implements VE_Logger for logging, utilizing spdlog for efficient logging.
+- Handles dynamic linking with spdlog to avoid duplicate linking issues.
+- Added Time class for delta time calculations and frame time management.
+
+### Rendering Module (VelopraRenderer)
+- Manages rendering-related tasks using OpenGL.
+- Interacts with external libraries like GLEW, GLFW, Assimp, and glm.
+- Resolved initial linking issues with spdlog through dynamic linking in the Core module.
+
+### Input System Module (VelopraInputSystem) [Ongoing]
+- Handles input events and processing.
+- Integrated with the Core module for event handling.
+- Contains InputUpdateLayer for updating input states.
+- Development and integration are ongoing.
+
+### UI Module (VelopraUI)
+- Utilizes Qt for creating and managing user interfaces.
+- Integrated with the Core and Rendering modules for seamless UI interaction within games.
+- Provides tools for developing in-game menus, editors, and custom user interfaces.
+
+### Application Module
+- The executable part of the engine, where main application logic resides.
+- Initializes and ties together other modules (Core, Renderer, Input System, UI).
+- Implements the main loop, managing rendering, input processing, and UI interactions.
+
+## Event Handling
+- Event bus and event queue systems for efficient event handling.
+- Events are dispatched and processed through these systems for a modular and decoupled architecture.
+
+## Logging System
+- Utilizes spdlog for logging, integrated into the Core module.
+- Offers various logging levels (trace, info, warn, error, critical).
+- Macros for easy logging throughout the engine.
+
+## Time Management
+- A Time class introduced for managing time-related functionalities like delta time.
+- Ensures consistent frame time calculations across the engine.
+
+## Asset Management Module (Planned)
+- Future plans to include an asset management module for handling game assets (textures, models, audio files, scripts).
+- Will manage loading, caching, and unloading of resources.
+
+## Challenges and Resolutions
+- Faced challenges with spdlog linking, resolved by ensuring dynamic linking and proper CMake configurations.
+- Adjusted CMake files and project structure for modular design and inter-module dependencies.
+
+## Future Enhancements
+- Integration of physics, audio, and advanced input handling.
+- Expansion of the rendering module for more graphics features.
+- Implementing a user interface and editor tools.
+
+## Development Environment
+- Developed with C++ (C++20 standard).
+- Uses CMake for build automation and cross-platform compilation.
+- Utilizes Microsoft Visual Studio and vcpkg for package management.
 
 ## Getting Started
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
-- A C++17 compliant compiler (e.g., GCC, Clang, MSVC)
-- [CMake](https://cmake.org/download/) for build process management
-- A package manager like [vcpkg](https://github.com/microsoft/vcpkg) (optional, for managing dependencies)
+Before starting, ensure you have:
+- A C++17 compliant compiler (e.g., GCC, Clang, MSVC).
+- [CMake](https://cmake.org/download/) for managing the build process.
+- A package manager like [vcpkg](https://github.com/microsoft/vcpkg) (optional, for dependency management).
 
 ### Dependencies
 
-The Velopra Engine uses `spdlog` for logging, `GLEW`, `GLFW` and `GLM` for rendering, and `Assimp` for model loading. If you are using vcpkg, you can install these dependencies as follows:
+Velopra Engine leverages `spdlog` for logging, `GLEW` for OpenGL extension wrangling, `GLM` for mathematics, `Assimp` for model loading and `qt5` for the UI. Use vcpkg or a similar package manager to install these dependencies:
 
 ```bash
-vcpkg install spdlog glew glfw3 assimp glm
+vcpkg install spdlog glew assimp glm qt5
 ```
 
-f you're not using a package manager, ensure you include the necessary libraries in your project.
+If you're not using a package manager, ensure you include the necessary libraries in your project.
 
 ### Building the Project
 
@@ -47,23 +109,17 @@ make
 ```
 
 ### Usage
-To use the Velopra Engine in your project, include the core and rendering header files in your source and link against the Velopra Engine library.
 
-### Contributing
+To utilize Velopra Engine in your projects, include the core and rendering headers and link against the Velopra Engine libraries.
 
-Currently, contributions are closed but will be opened in the future as the engine expands!
+## Contributing
 
-### License
+Contributions are currently closed but will open in the future as the engine evolves.
 
-Velopra Engine is released under the MIT License. See the LICENSE file for more details.
+## License
 
-### Distribution
+Velopra Engine is under the MIT License. Refer to the LICENSE file for more information.
 
-Pre-compiled binaries for each release will be provided soon. Stay tuned!
+## Distribution
 
-### Roadmap
-
-- Complete the model class implementation for 3D model handling.
-- Integrate support for multiple rendering backends.
-- Develop a comprehensive scene graph and entity-component system.
-- Expand the engine's toolset for physics, audio, and AI.
+Pre-compiled binaries for each release will be available soon.
