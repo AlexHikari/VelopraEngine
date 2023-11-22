@@ -1,50 +1,44 @@
 #include "InputEventGenerator.h"
-#include "VE_Core.h" 
-#include "VE_KeyboardEvent.h" 
-#include "VE_MouseEvent.h" 
 #include "InputTypes.h"
+#include "VE_Core.h"
+#include "VE_KeyboardEvent.h"
+#include "VE_MouseEvent.h"
 
-
-void InputEventGenerator::Update() {
-}
-
+void InputEventGenerator::Update() {}
 
 bool InputEventGenerator::IsKeyPressed(KeyCode key) const {
-	auto it = keyStates.find(key);
-	return it != keyStates.end() && it->second;
+  auto it = keyStates.find(key);
+  return it != keyStates.end() && it->second;
 }
 
 bool InputEventGenerator::IsKeyReleased(KeyCode key) const {
-	auto it = keyStates.find(key);
-	return it != keyStates.end() && !it->second;
+  auto it = keyStates.find(key);
+  return it != keyStates.end() && !it->second;
 }
 
 bool InputEventGenerator::IsMouseButtonPressed(MouseCode button) const {
-	auto it = mouseButtonStates.find(button);
-	return it != mouseButtonStates.end() && it->second;
+  auto it = mouseButtonStates.find(button);
+  return it != mouseButtonStates.end() && it->second;
 }
 
 std::pair<float, float> InputEventGenerator::GetMousePosition() const {
-	return { mouseX, mouseY };
+  return {mouseX, mouseY};
 }
 
-float InputEventGenerator::GetMouseX() const {
-	return mouseX;
-}
+float InputEventGenerator::GetMouseX() const { return mouseX; }
 
-float InputEventGenerator::GetMouseY() const {
-	return mouseY;
-}
+float InputEventGenerator::GetMouseY() const { return mouseY; }
 
 void InputEventGenerator::UpdateKeyState(KeyCode key, bool pressed) {
-	keyStates[key] = pressed;
+  keyStates[key] = pressed;
 }
 
-void InputEventGenerator::UpdateMouseButtonState(MouseCode button, bool pressed) {
-	mouseButtonStates[button] = pressed;
+void InputEventGenerator::UpdateMouseButtonState(MouseCode button,
+                                                 bool pressed) {
+  mouseButtonStates[button] = pressed;
 }
 
 void InputEventGenerator::UpdateMousePosition(float x, float y) {
-	mouseX = x;
-	mouseY = y;
+  mouseX = x;
+  mouseY = y;
 }

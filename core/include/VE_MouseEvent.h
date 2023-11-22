@@ -1,39 +1,43 @@
 #ifndef VE_MOUSE_EVENT_H
 #define VE_MOUSE_EVENT_H
 
+#include "VE_CoreAPI.h"
 #include "VE_Event.h"
 
-class MouseMovedEvent : public Event {
+namespace velopraEngine {
+namespace core {
+
+class VELOPRACORE_API MouseMovedEvent : public Event {
 public:
-	MouseMovedEvent(float x, float y)
-		: MouseX(x), MouseY(y) {}
+  MouseMovedEvent(float x, float y);
 
-	EventType GetEventType() const override { return EventType::MouseMoved; }
-	const char* GetName() const override { return "MouseMoved"; }
+  EventType GetEventType() const override;
+  const char *GetName() const override;
 
-	float MouseX, MouseY;
+  float MouseX, MouseY;
 };
 
-class MouseButtonReleasedEvent : public Event {
+class VELOPRACORE_API MouseButtonReleasedEvent : public Event {
 public:
-	MouseButtonReleasedEvent(int button)
-		: Button(button) {}
+  MouseButtonReleasedEvent(int button);
 
-	EventType GetEventType() const override { return EventType::MouseButtonReleased; }
-	const char* GetName() const override { return "MouseButtonReleased"; }
+  EventType GetEventType() const override;
+  const char *GetName() const override;
 
-	int Button;
+  int Button;
 };
 
-class MouseButtonPressedEvent : public Event {
+class VELOPRACORE_API MouseButtonPressedEvent : public Event {
 public:
-	MouseButtonPressedEvent(int button)
-		: Button(button) {}
+  MouseButtonPressedEvent(int button);
 
-	EventType GetEventType() const override { return EventType::MouseButtonPressed; }
-	const char* GetName() const override { return "MouseButtonPressed"; }
+  EventType GetEventType() const override;
+  const char *GetName() const override;
 
-	int Button;
+  int Button;
 };
+
+} // namespace core
+} // namespace velopraEngine
 
 #endif // VE_MOUSE_EVENT_H

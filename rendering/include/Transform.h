@@ -7,17 +7,17 @@
 
 class Transform {
 public:
-	Transform();
-	glm::mat4 GetModelMatrix() const;
+  Transform();
+  glm::mat4 GetModelMatrix() const;
 
-	void SetPosition(const glm::vec3& pos);
-	void SetRotation(const glm::vec3& rot); // Euler angles in degrees
-	void SetScale(const glm::vec3& scale);
+  void SetPosition(const glm::vec3 &pos);
+  void SetRotation(const glm::vec3 &rot); // Euler angles in degrees
+  void SetScale(const glm::vec3 &scale);
 
 private:
-	glm::vec3 position;
-	glm::vec3 rotation; // Euler angles
-	glm::vec3 scale;
+  glm::vec3 position;
+  glm::vec3 rotation; // Euler angles
+  glm::vec3 scale;
 };
 
 #endif // VE_TRANSFORM_H

@@ -1,4 +1,4 @@
-# CMakeLists.txt
+# rendering CMakeLists.txt
 cmake_minimum_required(VERSION 3.8)
 project(VelopraRenderer)
 
@@ -13,22 +13,34 @@ set(RENDERING_SOURCE_FILES
     src/pch.cpp
     src/Shader.cpp
     src/Transform.cpp
+    src/Utils.cpp
 )
 set(RENDERING_HEADER_FILES
     include/Camera.h
-    include/IVRenderer.h
+    include/IMesh.h
+    include/IRenderer.h
+    include/ITexture.h
     include/IWindowSizeObserver.h
     include/Mesh.h
     include/Model.h
     include/OpenGLRenderer.h
+    include/OpenGLTexture.h
     include/pch.h
+    include/RendererAPI.h
     include/Shader.h
     include/stb_image.h
     include/Transform.h
+    include/Utils.h
 )
 
 # Create the Renderer library
 add_library(VelopraRenderer ${RENDERING_SOURCE_FILES} ${RENDERING_HEADER_FILES})
+
+# Define BUILDING_RENDERER_DLL when building a shared library
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(VelopraRenderer PRIVATE BUILDING_RENDERER_DLL)
+endif()
+
 
 # Find necessary packages
 find_package(OpenGL REQUIRED)
@@ -36,7 +48,7 @@ find_package(GLEW REQUIRED)
 find_package(assimp REQUIRED)
 find_package(glm REQUIRED)
 
-target_include_directories(VelopraRenderer PRIVATE
+target_link_directories(VelopraRenderer PRIVATE
     ${GLEW_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${ASSIMP_INCLUDE_DIRS}

@@ -1,16 +1,15 @@
 #include "VE_Layer.h"
 
-Layer::Layer(const std::string& name)
-	: name(name), isVisible(true) {}
+namespace velopraEngine {
+namespace core {
 
-const std::string& Layer::GetName() const {
-	return name;
-}
+Layer::Layer(const std::string &name) : name(name), isVisible(true) {}
 
-void Layer::SetVisible(bool visible) {
-	isVisible = visible;
-}
+const std::string &Layer::GetName() const { return name; }
 
-bool Layer::IsVisible() const {
-	return isVisible;
-}
+void Layer::SetVisible(bool visible) { isVisible = visible; }
+
+bool Layer::IsVisible() const { return isVisible; }
+
+} // namespace core
+} // namespace velopraEngine

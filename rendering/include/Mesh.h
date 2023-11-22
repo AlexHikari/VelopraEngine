@@ -5,35 +5,34 @@
 #include <vector>
 
 struct Vertex {
-	// Position
-	glm::vec3 position;
-	// Normal
-	glm::vec3 normal;
-	// Texture Coordinates
-	glm::vec2 texCoords;
+  // Position
+  glm::vec3 position;
+  // Normal
+  glm::vec3 normal;
+  // Texture Coordinates
+  glm::vec2 texCoords;
 };
 
 class Mesh {
 public:
-	Mesh(const std::vector<Vertex>& vertices, const std::vector<GLuint>& indices);
-	~Mesh();
+  Mesh(const std::vector<Vertex> &vertices, const std::vector<GLuint> &indices);
+  ~Mesh();
 
-	Mesh(Mesh&& other) noexcept;
-	Mesh& operator=(Mesh&&) noexcept;
+  Mesh(Mesh &&other) noexcept;
+  Mesh &operator=(Mesh &&) noexcept;
 
+  Mesh(const Mesh &) = delete;
+  Mesh &operator=(const Mesh &) = delete;
 
-	Mesh(const Mesh&) = delete;
-	Mesh& operator=(const Mesh&) = delete;
-
-	void Draw() const;
+  void Draw() const;
 
 private:
-	std::vector<Vertex> vertices;
-	std::vector<GLuint> indices;
+  std::vector<Vertex> vertices;
+  std::vector<GLuint> indices;
 
-	GLuint VAO, VBO, EBO;
+  GLuint VAO, VBO, EBO;
 
-	void SetupMesh();
+  void SetupMesh();
 };
 
 #endif // VE_MESH_H

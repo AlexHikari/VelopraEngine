@@ -15,6 +15,9 @@ endif()
 
 project("VelopraEngine")
 
+# Option to control building of shared or static libraries
+option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)" ON)
+
 # Include subdirectories for each module
 add_subdirectory("core")
 add_subdirectory("input")

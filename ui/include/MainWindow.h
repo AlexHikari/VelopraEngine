@@ -2,23 +2,25 @@
 #define VE_MAIN_WINDOW_H
 
 #include "QtOpenGLWidget.h"
-#include <QMainWindow>
+#include "UIApi.h"
 #include <QDockWidget>
+#include <QMainWindow>
 
 class WindowManager;
 
-class MainWindow : public QMainWindow {
-	Q_OBJECT
+class UI_API MainWindow : public QMainWindow {
+  Q_OBJECT
 
 public:
-	MainWindow(QWidget* parent = nullptr, std::shared_ptr<WindowManager> windowManager = nullptr);
+  MainWindow(QWidget *parent = nullptr,
+             std::shared_ptr<WindowManager> windowManager = nullptr);
 
 private:
-	QtOpenGLWidget* openGLWidget;
-	QDockWidget* leftDockWidget;
-	QDockWidget* rightDockWidget;
+  QtOpenGLWidget *openGLWidget;
+  QDockWidget *leftDockWidget;
+  QDockWidget *rightDockWidget;
 
-	bool eventFilter(QObject* object, QEvent* event);
+  bool eventFilter(QObject *object, QEvent *event);
 };
 
 #endif // VE_MAIN_WINDOW_H

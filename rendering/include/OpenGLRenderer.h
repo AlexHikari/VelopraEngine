@@ -1,34 +1,39 @@
 #ifndef VE_OPENGL_RENDERER_H
 #define VE_OPENGL_RENDERER_H
 
-#include <GL/glew.h>
-#include <unordered_map>
-#include <string>
-#include "Shader.h"
-#include "Model.h"
 #include "Camera.h"
+#include "IRenderer.h"
+#include "ITexture.h"
 #include "IWindowSizeObserver.h"
+#include "Model.h"
+#include "RendererAPI.h"
+#include "Shader.h"
+#include <GL/glew.h>
+#include <string>
+#include <unordered_map>
 
-class OpenGLRenderer : public IWindowSizeObserver {
+class RENDERER_API OpenGLRenderer : public IWindowSizeObserver,
+                                    public IRenderer {
 public:
-	OpenGLRenderer();
-	~OpenGLRenderer();
+  OpenGLRenderer();
+  ~OpenGLRenderer() = default;
 
-	void Initialize();
-	void BeginFrame();
-	void RenderFrame();
-	GLuint LoadTexture(const std::string& filePath);
-	void UpdateProjectionMatrix(int width, int height);
+  void Initialize() override;
+  void BeginFrame() override;
+  void RenderFrame() override;
+  virtual std::shared_ptr<ITexture>
+  LoadTexture(const std::string &filePath) override;
+  virtual void OnWindowSizeChanged(int width, int height) override;
 
-	virtual void OnWindowSizeChanged(int width, int height) override;
+  void UpdateProjectionMatrix(int width, int height);
 
 private:
-	std::unordered_map<std::string, GLuint> textureCache;
-	Shader* shader;
-	Model* model;
-	Camera* camera;
-	glm::mat4 projectionMatrix;
-	float aspectRatio;
+  std::unordered_map<std::string, std::shared_ptr<ITexture>> textureCache;
+  std::unique_ptr<Shader> shader;
+  std::unique_ptr<Model> model;
+  std::unique_ptr<Camera> camera;
+  glm::mat4 projectionMatrix;
+  float aspectRatio;
 };
 
 #endif // VE_OPENGL_RENDERER_H

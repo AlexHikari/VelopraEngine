@@ -3,8 +3,8 @@
 
 class IWindowSizeObserver {
 public:
-	virtual ~IWindowSizeObserver() = default;
-	virtual void OnWindowSizeChanged(int width, int height) = 0;
+  virtual ~IWindowSizeObserver() = default;
+  virtual void OnWindowSizeChanged(int width, int height) = 0;
 };
 
-#endif //VE_WINDOW_SIZE_OBSERVER_H
+#endif // VE_WINDOW_SIZE_OBSERVER_H
