@@ -1,3 +1,24 @@
+![VelopraLogo](https://github.com/AlexHikari/VelopraEngine/assets/15806836/1892d66b-1832-4eed-a5a4-b2ccd028b48a)
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 692 1024" style="enable-background:new 0 0 692 1024;" xml:space="preserve">
+<g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)">
+	<path d="M908,7842c-170-1-308-5-308-9s49-99,109-212s265-503,456-866c844-1604,2289-4341,2295-4348c4-5,47,67,95,160
+		c49,92,287,546,530,1008c536,1018,677,1287,1552,2955c377,718,687,1308,690,1313c2,4-203,7-456,7h-460l-90-172l-90-173l195-3
+		c107-1,194-5,194-8s-38-76-84-162s-185-353-309-592c-302-583-456-879-607-1165c-26-49-148-283-270-520c-123-236-302-583-400-770
+		c-432-829-480-923-480-936c0-8-3-9-9-4c-11,13-185,345-795,1515c-44,85-81,160-82,165c-2,6-84,165-184,355s-294,561-432,825
+		s-303,581-368,705c-219,419-300,577-300,583c0,4,86,7,191,7c159,0,190,2,187,14c-2,8-41,87-88,175l-85,161l-145-2
+		C1280,7846,1077,7844,908,7842z"/>
+	<path d="M1998.5,7287.6c40-74,847-1624,1247-2395c120-233,221-423,224-423s47,82,97,183c110,218,248,486,700,1362
+		c187,363,398,773,468,910c70,138,150,292,177,343l50,92l-262-2l-261-3l-235-455c-129-250-348-675-486-943l-251-488l-32,58
+		c-17,32-189,360-380,728c-192,369-400,767-461,885l-112,215l-261,3l-262,2L1998.5,7287.6z"/>
+	<polyline class="st0" points="1501.3,7701.6 1505,7850 1690.9,7493 1584.8,7493 1300,7493 3461,3345 5620,7494 5426,7502 
+		5409.1,7493 3460,3767.7 1519.6,7493 	"/>
+	<polyline points="856.1,7841.6 1300,7493 1695.2,7493 1505,7850 1300,7493 1154.3,7671.5 	"/>
+	<polyline points="5411,7850 5226.5,7493 5620,7494 	"/>
+</g>
+</svg>
 # Velopra Engine
 
 The Velopra Engine is a versatile, high-performance game engine designed for developing both 2D and 3D games. It offers a comprehensive suite of tools and a robust framework, including mathematics, memory management, rendering capabilities, and more, crucial for contemporary game development.
