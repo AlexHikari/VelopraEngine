@@ -23,14 +23,14 @@ public:
   ITransform &GetTransform() override;
 
 private:
-  std::vector<OpenGLMesh> meshes;
+  std::vector<std::unique_ptr<OpenGLMesh>> meshes;
   std::string directory;
   OpenGLRenderer *renderer;
   std::unique_ptr<ITransform> transform;
 
   void LoadModel(const std::string &path);
   void ProcessNode(aiNode *node, const aiScene *scene);
-  OpenGLMesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+  std::unique_ptr<OpenGLMesh> ProcessMesh(aiMesh *mesh, const aiScene *scene);
   std::vector<GLuint> LoadMaterialTextures(aiMaterial *mat, aiTextureType type,
                                            const std::string &typeName);
 };

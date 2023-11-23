@@ -1,5 +1,5 @@
-#include "InputEventGenerator.h"
-#include "InputTypes.h"
+#include "VE_InputEventGenerator.h"
+#include "VE_InputTypes.h"
 #include "VE_Core.h"
 #include "VE_KeyboardEvent.h"
 #include "VE_MouseEvent.h"

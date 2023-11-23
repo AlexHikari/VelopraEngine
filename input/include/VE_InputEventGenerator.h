@@ -10,7 +10,7 @@
 namespace velopraEngine {
 namespace input {
 
-class VE_INPUT_API_H InputEventGenerator {
+class VELOPRAINPUT_API InputEventGenerator {
 public:
   void Update(); // Called every frame to update input states
 

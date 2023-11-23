@@ -7,7 +7,7 @@ namespace velopraEngine {
 namespace input {
 
 // KeyCodes Enum
-enum class VE_INPUT_API_H KeyCode {
+enum class VELOPRAINPUT_API KeyCode {
   // Letters
   A = 65,
   B,
@@ -117,7 +117,7 @@ enum class VE_INPUT_API_H KeyCode {
 };
 
 // Mouse Button Enum
-enum class VE_INPUT_API_H MouseCode {
+enum class VELOPRAINPUT_API MouseCode {
   Button0 = 0,
   Button1,
   Button2,

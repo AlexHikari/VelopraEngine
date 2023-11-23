@@ -2,12 +2,13 @@
 #define VE_IRENDERER_H
 
 #include "VE_ITexture.h"
+#include "VE_RendererAPI.h"
 #include <memory>
 
 namespace velopraEngine {
 namespace render {
 
-class IRenderer {
+class VELOPRARENDERER_API IRenderer {
 public:
   virtual ~IRenderer() = default;
 

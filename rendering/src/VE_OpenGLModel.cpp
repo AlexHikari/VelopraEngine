@@ -16,7 +16,7 @@ OpenGLModel::OpenGLModel(const std::string &path, OpenGLRenderer &renderer)
 
 void OpenGLModel::Draw() const {
   for (const auto &mesh : meshes) {
-    mesh.Draw();
+    mesh->Draw();
   }
 }
 
@@ -38,6 +38,7 @@ void OpenGLModel::LoadModel(const std::string &path) {
 }
 
 void OpenGLModel::ProcessNode(aiNode *node, const aiScene *scene) {
+  VELOPRA_CORE_INFO("Processing node: {}", node->mName.C_Str());
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
     meshes.push_back(std::move(ProcessMesh(mesh, scene)));
@@ -48,25 +49,34 @@ void OpenGLModel::ProcessNode(aiNode *node, const aiScene *scene) {
   }
 }
 
-OpenGLMesh OpenGLModel::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
-  std::vector<Vertex> vertices;
+std::unique_ptr<OpenGLMesh> OpenGLModel::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
+  VELOPRA_CORE_INFO("Processing mesh: {}", mesh->mName.C_Str());
+  std::vector<GLMVertex> vertices;
   std::vector<GLuint> indices;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-    Vertex vertex;
-    vertex.position = core::Vector3(
-        mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+    GLMVertex vertex;
+    glm::vec3 vector;
+
+    vector.x = mesh->mVertices[i].x;
+    vector.y = mesh->mVertices[i].y;
+    vector.z = mesh->mVertices[i].z;
+    vertex.position = vector;
 
     if (mesh->HasNormals()) {
-      vertex.normal = core::Vector3(
-          mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+      vector.x = mesh->mNormals[i].x;
+      vector.y = mesh->mNormals[i].y;
+      vector.z = mesh->mNormals[i].z;
+      vertex.normal = vector;
     }
 
     if (mesh->mTextureCoords[0]) {
-      vertex.texCoords = core::Vector2(mesh->mTextureCoords[0][i].x,
-                                       mesh->mTextureCoords[0][i].y);
+      glm::vec2 vec;
+      vec.x = mesh->mTextureCoords[0][i].x;
+      vec.y = mesh->mTextureCoords[0][i].y;
+      vertex.texCoords = vec;
     } else {
-      vertex.texCoords = core::Vector2(0.0f, 0.0f);
+      vertex.texCoords = glm::vec2(0.0f, 0.0f);
     }
 
     vertices.push_back(vertex);
@@ -89,7 +99,12 @@ OpenGLMesh OpenGLModel::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
     // More texture types can be loaded if needed
   }
 
-  return OpenGLMesh(std::move(vertices), std::move(indices));
+  VELOPRA_CORE_INFO("Mesh processed with {} vertices and {} indices",
+                    vertices.size(), indices.size());
+  auto newMesh =
+      std::make_unique<OpenGLMesh>(std::move(vertices), std::move(indices));
+
+  return newMesh;
 }
 
 std::vector<GLuint>

@@ -4,13 +4,12 @@
 namespace velopraEngine {
 namespace render {
 
-OpenGLMesh::OpenGLMesh(const std::vector<Vertex> &vertices,
-           const std::vector<GLuint> &indices)
+OpenGLMesh::OpenGLMesh(const std::vector<GLMVertex> &vertices,
+                       const std::vector<GLuint> &indices)
     : vertices(vertices), indices(indices) {
   SetupMesh();
 }
 
-// Move constructor
 OpenGLMesh::OpenGLMesh(OpenGLMesh &&other) noexcept
     : VAO(other.VAO), VBO(other.VBO), EBO(other.EBO),
       vertices(std::move(other.vertices)), indices(std::move(other.indices)) {
@@ -19,19 +18,18 @@ OpenGLMesh::OpenGLMesh(OpenGLMesh &&other) noexcept
   other.EBO = 0;
 }
 
-// Move assignment operator
 OpenGLMesh &OpenGLMesh::operator=(OpenGLMesh &&other) noexcept {
   if (this != &other) {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    CleanUp(); // Clean up existing resources
 
+    // Transfer ownership
     VAO = other.VAO;
     VBO = other.VBO;
     EBO = other.EBO;
     vertices = std::move(other.vertices);
     indices = std::move(other.indices);
 
+    // Reset other's resource handles
     other.VAO = 0;
     other.VBO = 0;
     other.EBO = 0;
@@ -40,9 +38,15 @@ OpenGLMesh &OpenGLMesh::operator=(OpenGLMesh &&other) noexcept {
 }
 
 OpenGLMesh::~OpenGLMesh() {
+  VELOPRA_CORE_INFO("Destroying OpenGLMesh with VAO: {}", VAO);
+  CleanUp();
+}
+
+void OpenGLMesh::CleanUp() {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
+  VELOPRA_CORE_INFO("Mesh resources cleaned up.");
 }
 
 void OpenGLMesh::SetupMesh() {
@@ -51,49 +55,52 @@ void OpenGLMesh::SetupMesh() {
   glGenBuffers(1, &EBO);
 
   glBindVertexArray(VAO);
+
+  // Load data into vertex buffer
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLMVertex),
+               vertices.data(), GL_STATIC_DRAW);
 
-  // Convert vertices to GLM format for OpenGL
-  std::vector<glm::vec3> glmVertices;
-  std::vector<glm::vec3> glmNormals;
-  std::vector<glm::vec2> glmTexCoords;
-  for (const auto &vertex : vertices) {
-    glmVertices.push_back(ConvertToGLMVec3(vertex.position));
-    glmNormals.push_back(ConvertToGLMVec3(vertex.normal));
-    glmTexCoords.push_back(ConvertToGLMVec2(vertex.texCoords));
-  }
+  // Load data into element buffer
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),
+               indices.data(), GL_STATIC_DRAW);
 
-  // Combine converted data into a single buffer
-  std::vector<float> bufferData;
-  for (size_t i = 0; i < vertices.size(); ++i) {
-    bufferData.insert(bufferData.end(),
-                      {glmVertices[i].x, glmVertices[i].y, glmVertices[i].z});
-    bufferData.insert(bufferData.end(),
-                      {glmNormals[i].x, glmNormals[i].y, glmNormals[i].z});
-    bufferData.insert(bufferData.end(), {glmTexCoords[i].x, glmTexCoords[i].y});
-  }
-
-  glBufferData(GL_ARRAY_BUFFER, bufferData.size() * sizeof(float),
-               bufferData.data(), GL_STATIC_DRAW);
-
-  // Vertex attribute setup
+  // Set the vertex attribute pointers
+  // Vertex Positions
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
-                        (void *)(3 * sizeof(float)));
-  glEnableVertexAttribArray(2);
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),
-                        (void *)(6 * sizeof(float)));
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLMVertex), (void *)0);
 
-  glBindVertexArray(0);
+  // Vertex Normals
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLMVertex),
+                        (void *)offsetof(GLMVertex, normal));
+
+  // Vertex Texture Coords
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLMVertex),
+                        (void *)offsetof(GLMVertex, texCoords));
+
+  glBindVertexArray(0); // Unbind VAO
+
+  VELOPRA_CORE_INFO("Mesh setup complete.");
 }
+
 
 void OpenGLMesh::Draw() const {
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()),
                  GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+  glBindVertexArray(0); // Unbinding is optional
+
+  CheckOpenGLError("Mesh Draw");
+}
+
+void OpenGLMesh::CheckOpenGLError(const std::string &operation) {
+  GLenum err;
+  while ((err = glGetError()) != GL_NO_ERROR) {
+    VELOPRA_CORE_CRITICAL("OpenGL error during {}: {}", operation, err);
+  }
 }
 
 } // namespace render

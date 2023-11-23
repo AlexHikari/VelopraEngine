@@ -27,11 +27,11 @@ void OpenGLRenderer::Initialize() {
     return;
   }
 
-  camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
+  camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 100.0f));
   model = std::make_unique<OpenGLModel>("model.obj", *this);
-  shader = std::make_unique<OpenGLShader>("vertex.glsl", "fragment.glsl");
+  shader = std::make_unique<OpenGLShader>("vertex_shader.glsl", "fragment_shader.glsl");
   
-  model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -1.0f));
+  model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -100.0f));
 
   aspectRatio = 800.0f / 600.0f;
 
@@ -109,7 +109,7 @@ void OpenGLRenderer::OnWindowSizeChanged(int width, int height) {
 
 void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
   aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-  projectionMatrix = core::Matrix4::Perspective(glm::radians(45.0f),
+  projectionMatrix = core::Matrix4::Perspective(glm::radians(90.0f),
                                                 aspectRatio, 0.1f, 100.0f);
   glViewport(0, 0, width, height);
 }

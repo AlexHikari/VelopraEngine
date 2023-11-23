@@ -1,14 +1,22 @@
-#include "MainWindow.h"
-#include "OpenGLRenderer.h"
+#include "VE_MainWindow.h"
+#include "VE_IRenderWidget.h"
 #include "VE_LoggerMacros.h"
+#include <QEvent>
+#include <QKeyEvent>
 #include <QLabel>
+#include <QMouseEvent>
+
+namespace velopraEngine {
+namespace ui {
 
 MainWindow::MainWindow(QWidget *parent,
-                       std::shared_ptr<WindowManager> windowManager)
-    : QMainWindow(parent) {
-  // Central Widget (OpenGL Widget)
-  openGLWidget = new QtOpenGLWidget(this, windowManager);
-  setCentralWidget(openGLWidget);
+                       std::shared_ptr<WindowManager> windowManager,
+                       std::unique_ptr<IRenderWidget> rW)
+    : QMainWindow(parent), renderWidget(std::move(rW)) {
+
+  if (renderWidget) {
+    setCentralWidget(dynamic_cast<QWidget *>(renderWidget.get()));
+  }
 
   // Left Dock Widget
   leftDockWidget = new QDockWidget(tr("Left Panel"), this);
@@ -29,24 +37,8 @@ MainWindow::MainWindow(QWidget *parent,
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
-  switch (event->type()) {
-  case QEvent::KeyPress: {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-    openGLWidget->keyPressEvent(keyEvent);
-    break;
-  }
-  case (QEvent::MouseButtonPress || QEvent::MouseButtonRelease): {
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-    openGLWidget->mousePressEvent(mouseEvent);
-    break;
-  }
-  case QEvent::MouseMove: {
-    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-    openGLWidget->mouseMoveEvent(mouseEvent);
-    break;
-  }
-  default:
-    break;
-  }
   return QMainWindow::eventFilter(obj, event);
 }
+
+} // namespace ui
+} // namespace velopraEngine
