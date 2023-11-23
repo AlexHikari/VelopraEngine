@@ -1,15 +1,23 @@
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "OpenGLRenderer.h"
-#include "OpenGLTexture.h"
-#include "pch.h"
+#include "VE_OpenGLRenderer.h"
+#include "VE_RenderUtils.h"
+#include "VE_OpenGLCamera.h"
+#include "VE_OpenGLModel.h"
+#include "VE_OpenGLTexture.h"
+#include "VE_OpenGlShader.h"
+#include "VE_pch.h"
 #include "stb_image.h"
 
+namespace velopraEngine {
+namespace render {
+
 OpenGLRenderer::OpenGLRenderer()
-    : shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f),
-      projectionMatrix(
-          glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f)) {}
+    : shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f) {
+  projectionMatrix =
+      core::Matrix4::Perspective(45.0f, aspectRatio, 0.1f, 100.0f);
+}
 
 void OpenGLRenderer::Initialize() {
 
@@ -19,11 +27,11 @@ void OpenGLRenderer::Initialize() {
     return;
   }
 
-  camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
-  shader =
-      std::make_unique<Shader>("vertex_shader.glsl", "fragment_shader.glsl");
-  model = std::make_unique<Model>("model.obj", *this);
-  model->GetTransform().SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
+  camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 3.0f));
+  model = std::make_unique<OpenGLModel>("model.obj", *this);
+  shader = std::make_unique<OpenGLShader>("vertex.glsl", "fragment.glsl");
+  
+  model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -1.0f));
 
   aspectRatio = 800.0f / 600.0f;
 
@@ -40,26 +48,17 @@ void OpenGLRenderer::BeginFrame() {
 void OpenGLRenderer::RenderFrame() {
   glEnable(GL_DEPTH_TEST);
 
-  // Bind shader
   shader->Bind();
   if (!shader->ValidateProgram()) {
     VELOPRA_CORE_ERROR("Shader program validation failed.");
     return;
   }
 
-  // Get and log matrices
-  glm::mat4 view = camera->GetViewMatrix();
-  glm::mat4 modelMatrix = model->GetTransform().GetModelMatrix();
-  glm::mat4 projection = projectionMatrix;
-
-  // Set uniforms
-  shader->SetUniformMat4f("u_Model", modelMatrix);
-  shader->SetUniformMat4f("u_View", view);
-  shader->SetUniformMat4f("u_Projection", projection);
+  shader->SetUniformMat4f("u_Model", model->GetTransform().GetModelMatrix());
+  shader->SetUniformMat4f("u_View", camera->GetViewMatrix());
+  shader->SetUniformMat4f("u_Projection", projectionMatrix);
 
   model->Draw();
-
-  // Unbind shader
   shader->Unbind();
 }
 
@@ -109,12 +108,13 @@ void OpenGLRenderer::OnWindowSizeChanged(int width, int height) {
 }
 
 void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
-
   aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-  projectionMatrix =
-      glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-  // Update viewport as well
+  projectionMatrix = core::Matrix4::Perspective(glm::radians(45.0f),
+                                                aspectRatio, 0.1f, 100.0f);
   glViewport(0, 0, width, height);
 }
+
+} // namespace render
+} // namespace velopraEngine
 
 #endif

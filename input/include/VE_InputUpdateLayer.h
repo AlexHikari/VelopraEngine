@@ -1,11 +1,15 @@
 #ifndef VE_INPUT_UPDATE_LAYER_H
 #define VE_INPUT_UPDATE_LAYER_H
 
+#include "VE_InputAPI.h"
 #include "InputEventGenerator.h"
 #include "VE_Layer.h"
 #include <memory>
 
-class InputUpdateLayer : public Layer {
+namespace velopraEngine {
+namespace input {
+
+class VE_INPUT_API_H InputUpdateLayer : public core::Layer {
 public:
   InputUpdateLayer()
       : Layer("InputUpdateLayer"),
@@ -16,5 +20,8 @@ public:
 private:
   std::unique_ptr<InputEventGenerator> inputEventGenerator;
 };
+
+} // namespace input
+} // namespace velopraEngine
 
 #endif // VE_INPUT_UPDATE_LAYER_H

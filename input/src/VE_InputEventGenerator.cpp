@@ -4,6 +4,9 @@
 #include "VE_KeyboardEvent.h"
 #include "VE_MouseEvent.h"
 
+namespace velopraEngine {
+namespace input {
+
 void InputEventGenerator::Update() {}
 
 bool InputEventGenerator::IsKeyPressed(KeyCode key) const {
@@ -42,3 +45,6 @@ void InputEventGenerator::UpdateMousePosition(float x, float y) {
   mouseX = x;
   mouseY = y;
 }
+
+} // namespace input
+} // namespace velopraEngine

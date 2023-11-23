@@ -1,8 +1,11 @@
 #ifndef VE_IRENDERER_H
 #define VE_IRENDERER_H
 
-#include "ITexture.h"
+#include "VE_ITexture.h"
 #include <memory>
+
+namespace velopraEngine {
+namespace render {
 
 class IRenderer {
 public:
@@ -15,5 +18,8 @@ public:
   LoadTexture(const std::string &filePath) = 0;
   virtual void OnWindowSizeChanged(int width, int height) = 0;
 };
+
+} // namespace render
+} // namespace velopraEngine
 
 #endif // VE_IRENDERER_H

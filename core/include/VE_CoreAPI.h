@@ -1,5 +1,5 @@
-#ifndef VELOPRACORE_API_H
-#define VELOPRACORE_API_H
+#ifndef VE_CORE_API_H
+#define VE_CORE_API_H
 
 #ifdef _WIN32
 #ifdef BUILDING_VELOPRACORE_DLL
@@ -11,4 +11,4 @@
 #define VELOPRACORE_API
 #endif
 
-#endif // VELOPRACORE_API_H
+#endif // VE_CORE_API_H

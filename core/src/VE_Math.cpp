@@ -49,5 +49,77 @@ Matrix4::Matrix4() {
     }
   }
 }
+
+Matrix4 Matrix4::Perspective(float32 fovDegrees, float32 aspectRatio,
+                           float32 nearPlane, float32 farPlane) {
+  Matrix4 result = {}; // Initialize to zero
+  const float32 fovRadians = static_cast<float32>(fovDegrees * (M_PI / 180.0f));
+  const float32 tanHalfFov = std::tan(fovRadians / 2.0f);
+
+  result.m[0][0] = 1.0f / (aspectRatio * tanHalfFov);
+  result.m[1][1] = 1.0f / tanHalfFov;
+  result.m[2][2] = -(farPlane + nearPlane) / (farPlane - nearPlane);
+  result.m[2][3] = -1.0f;
+  result.m[3][2] = -(2.0f * farPlane * nearPlane) / (farPlane - nearPlane);
+
+  return result;
+}
+Matrix4 Matrix4::Orthographic(float32 left, float32 right, float32 bottom,
+                            float32 top, float32 nearPlane, float32 farPlane) {
+  Matrix4 result = {}; // Initialize to zero
+
+  result.m[0][0] = 2.0f / (right - left);
+  result.m[1][1] = 2.0f / (top - bottom);
+  result.m[2][2] = -2.0f / (farPlane - nearPlane);
+  result.m[3][0] = -(right + left) / (right - left);
+  result.m[3][1] = -(top + bottom) / (top - bottom);
+  result.m[3][2] = -(farPlane + nearPlane) / (farPlane - nearPlane);
+  result.m[3][3] = 1.0f;
+
+  return result;
+}
+
+Quaternion::Quaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
+Quaternion::Quaternion(float32 w, float32 x, float32 y, float32 z)
+    : w(w), x(x), y(y), z(z) {}
+
+// Quaternion multiplication
+Quaternion Quaternion::operator*(const Quaternion &rhs) const {
+  return Quaternion(w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z,
+                    w * rhs.x + x * rhs.w + y * rhs.z - z * rhs.y,
+                    w * rhs.y - x * rhs.z + y * rhs.w + z * rhs.x,
+                    w * rhs.z + x * rhs.y - y * rhs.x + z * rhs.w);
+}
+
+// Normalize the quaternion
+void Quaternion::Normalize() {
+  float32 norm = std::sqrt(w * w + x * x + y * y + z * z);
+  if (norm > 0.0f) {
+    float32 invNorm = 1.0f / norm;
+    w *= invNorm;
+    x *= invNorm;
+    y *= invNorm;
+    z *= invNorm;
+  }
+}
+
+// Static function to create a quaternion from Euler angles (in degrees)
+Quaternion Quaternion::FromEulerAngles(float32 pitch, float32 yaw,
+                                       float32 roll) {
+  pitch = static_cast<float32>(pitch * M_PI / 180.0f);
+  yaw = static_cast<float32>(yaw * M_PI / 180.0f);
+  roll = static_cast<float32>(roll * M_PI / 180.0f);
+
+  float32 cy = cos(yaw * 0.5f);
+  float32 sy = sin(yaw * 0.5f);
+  float32 cp = cos(pitch * 0.5f);
+  float32 sp = sin(pitch * 0.5f);
+  float32 cr = cos(roll * 0.5f);
+  float32 sr = sin(roll * 0.5f);
+
+  return Quaternion(cr * cp * cy + sr * sp * sy, sr * cp * cy - cr * sp * sy,
+                    cr * sp * cy + sr * cp * sy, cr * cp * sy - sr * sp * cy);
+}
+
 } // namespace core
 } // namespace velopraEngine

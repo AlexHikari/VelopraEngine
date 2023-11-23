@@ -1,22 +1,26 @@
-#include "Model.h"
-#include "ITexture.h"
-#include "OpenGLRenderer.h"
-#include "OpenGLTexture.h"
-#include "pch.h"
+#include "VE_OpenGLModel.h"
+#include "VE_ITexture.h"
+#include "VE_OpenGLMesh.h"
+#include "VE_OpenGLRenderer.h"
+#include "VE_OpenGLTexture.h"
+#include "VE_pch.h"
 
-Model::Model(const std::string &path, OpenGLRenderer &renderer)
-    : renderer(&renderer) {
+namespace velopraEngine {
+namespace render {
+
+OpenGLModel::OpenGLModel(const std::string &path, OpenGLRenderer &renderer)
+    : renderer(&renderer), transform(std::make_unique<OpenGLTransform>()) {
   LoadModel(path);
   VELOPRA_CORE_INFO("Loading model: {}", path);
 }
 
-void Model::Draw() const {
-  for (auto &mesh : meshes) {
+void OpenGLModel::Draw() const {
+  for (const auto &mesh : meshes) {
     mesh.Draw();
   }
 }
 
-void Model::LoadModel(const std::string &path) {
+void OpenGLModel::LoadModel(const std::string &path) {
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile(
       path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals |
@@ -33,7 +37,7 @@ void Model::LoadModel(const std::string &path) {
   VELOPRA_CORE_INFO("Model loaded");
 }
 
-void Model::ProcessNode(aiNode *node, const aiScene *scene) {
+void OpenGLModel::ProcessNode(aiNode *node, const aiScene *scene) {
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
     meshes.push_back(std::move(ProcessMesh(mesh, scene)));
@@ -44,33 +48,25 @@ void Model::ProcessNode(aiNode *node, const aiScene *scene) {
   }
 }
 
-Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
+OpenGLMesh OpenGLModel::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
   std::vector<Vertex> vertices;
   std::vector<GLuint> indices;
 
   for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
     Vertex vertex;
-    glm::vec3 vector;
-
-    vector.x = mesh->mVertices[i].x;
-    vector.y = mesh->mVertices[i].y;
-    vector.z = mesh->mVertices[i].z;
-    vertex.position = vector;
+    vertex.position = core::Vector3(
+        mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 
     if (mesh->HasNormals()) {
-      vector.x = mesh->mNormals[i].x;
-      vector.y = mesh->mNormals[i].y;
-      vector.z = mesh->mNormals[i].z;
-      vertex.normal = vector;
+      vertex.normal = core::Vector3(
+          mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
     }
 
     if (mesh->mTextureCoords[0]) {
-      glm::vec2 vec;
-      vec.x = mesh->mTextureCoords[0][i].x;
-      vec.y = mesh->mTextureCoords[0][i].y;
-      vertex.texCoords = vec;
+      vertex.texCoords = core::Vector2(mesh->mTextureCoords[0][i].x,
+                                       mesh->mTextureCoords[0][i].y);
     } else {
-      vertex.texCoords = glm::vec2(0.0f, 0.0f);
+      vertex.texCoords = core::Vector2(0.0f, 0.0f);
     }
 
     vertices.push_back(vertex);
@@ -93,12 +89,12 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
     // More texture types can be loaded if needed
   }
 
-  return Mesh(std::move(vertices), std::move(indices));
+  return OpenGLMesh(std::move(vertices), std::move(indices));
 }
 
-std::vector<GLuint> Model::LoadMaterialTextures(aiMaterial *mat,
-                                                aiTextureType type,
-                                                const std::string &typeName) {
+std::vector<GLuint>
+OpenGLModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type,
+                                  const std::string &typeName) {
   std::vector<GLuint> textures;
   for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
     aiString str;
@@ -118,8 +114,11 @@ std::vector<GLuint> Model::LoadMaterialTextures(aiMaterial *mat,
   return textures;
 }
 
-void Model::SetTransform(const Transform &transform) {
-  this->transform = transform;
+void OpenGLModel::SetTransform(const ITransform &transform) {
+  *this->transform = transform;
 }
 
-Transform &Model::GetTransform() { return transform; }
+ITransform &OpenGLModel::GetTransform() { return *transform; }
+
+} // namespace render
+} // namespace velopraEngine

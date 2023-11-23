@@ -1,7 +1,11 @@
-#include "Shader.h"
-#include "pch.h"
+#include "VE_OpenGLShader.h"
+#include "VE_pch.h"
 
-Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath) {
+namespace velopraEngine {
+namespace render {
+
+OpenGLShader::OpenGLShader(const std::string &vertexPath,
+                      const std::string &fragmentPath) {
   std::string vertexSrc = ReadFile(vertexPath);
   std::string fragmentSrc = ReadFile(fragmentPath);
 
@@ -34,13 +38,14 @@ Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath) {
                     vertexPath, fragmentPath);
 }
 
-Shader::~Shader() { glDeleteProgram(programID); }
+OpenGLShader::~OpenGLShader() { glDeleteProgram(programID); }
 
-void Shader::Bind() const { glUseProgram(programID); }
+void OpenGLShader::Bind() const { glUseProgram(programID); }
 
-void Shader::Unbind() const { glUseProgram(0); }
+void OpenGLShader::Unbind() const { glUseProgram(0); }
 
-GLuint Shader::CompileShader(unsigned int type, const std::string &source) {
+GLuint OpenGLShader::CompileShader(unsigned int type,
+                                   const std::string &source) {
   GLuint shader = glCreateShader(type);
   const char *src = source.c_str();
   glShaderSource(shader, 1, &src, nullptr);
@@ -63,24 +68,25 @@ GLuint Shader::CompileShader(unsigned int type, const std::string &source) {
   return shader;
 }
 
-int Shader::GetUniformLocation(const std::string &name) {
+int OpenGLShader::GetUniformLocation(const std::string &name) {
   return glGetUniformLocation(programID, name.c_str());
 }
 
-void Shader::SetUniform1i(const std::string &name, int value) {
+void OpenGLShader::SetUniform1i(const std::string &name, int value) {
   glUniform1i(GetUniformLocation(name), value);
 }
 
-void Shader::SetUniform1f(const std::string &name, float value) {
+void OpenGLShader::SetUniform1f(const std::string &name, float value) {
   glUniform1f(GetUniformLocation(name), value);
 }
 
-void Shader::SetUniform4f(const std::string &name, float v0, float v1, float v2,
+void OpenGLShader::SetUniform4f(const std::string &name, float v0, float v1,
+                                float v2,
                           float v3) {
   glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
 
-std::string Shader::ReadFile(const std::string &filepath) {
+std::string OpenGLShader::ReadFile(const std::string &filepath) {
   std::ifstream fileStream(filepath, std::ios::in);
   if (!fileStream.is_open()) {
     VELOPRA_CORE_ERROR("Could not open file {}", filepath);
@@ -91,11 +97,13 @@ std::string Shader::ReadFile(const std::string &filepath) {
   return sstr.str();
 }
 
-void Shader::SetUniformMat4f(const std::string &name, const glm::mat4 &matrix) {
-  glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
+void OpenGLShader::SetUniformMat4f(const std::string &name,
+                                   const core::Matrix4 &matrix) {
+  glm::mat4 glmMatrix = ConvertToGLMMat4(matrix);
+  glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &glmMatrix[0][0]);
 }
 
-bool Shader::ValidateProgram() {
+bool OpenGLShader::ValidateProgram() {
   glValidateProgram(programID);
   GLint isValid = 0;
   glGetProgramiv(programID, GL_VALIDATE_STATUS, &isValid);
@@ -109,3 +117,6 @@ bool Shader::ValidateProgram() {
   }
   return true;
 }
+
+} // namespace render
+} // namespace velopraEngine

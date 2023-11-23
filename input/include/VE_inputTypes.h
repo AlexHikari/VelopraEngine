@@ -1,8 +1,13 @@
 #ifndef VE_INPUT_TYPES_H
 #define VE_INPUT_TYPES_H
 
+#include "VE_InputAPI.h"
+
+namespace velopraEngine {
+namespace input {
+
 // KeyCodes Enum
-enum class KeyCode {
+enum class VE_INPUT_API_H KeyCode {
   // Letters
   A = 65,
   B,
@@ -112,7 +117,7 @@ enum class KeyCode {
 };
 
 // Mouse Button Enum
-enum class MouseCode {
+enum class VE_INPUT_API_H MouseCode {
   Button0 = 0,
   Button1,
   Button2,
@@ -127,5 +132,8 @@ enum class MouseCode {
   Right = Button1,
   Middle = Button2
 };
+
+} // namespace input
+} // namespace velopraEngine
 
 #endif // VE_INPUT_TYPES_H

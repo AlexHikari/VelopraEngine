@@ -1,12 +1,16 @@
 #ifndef VE_INPUT_EVENT_GENERATOR_H
 #define VE_INPUT_EVENT_GENERATOR_H
 
-#include "InputTypes.h"
+#include "VE_InputAPI.h"
+#include "VE_InputTypes.h"
 #include "VE_Event.h"
 #include <unordered_map>
 #include <utility>
 
-class InputEventGenerator {
+namespace velopraEngine {
+namespace input {
+
+class VE_INPUT_API_H InputEventGenerator {
 public:
   void Update(); // Called every frame to update input states
 
@@ -30,5 +34,8 @@ private:
   void UpdateMouseButtonState(MouseCode button, bool pressed);
   void UpdateMousePosition(float x, float y);
 };
+
+} // namespace input
+} // namespace velopraEngine
 
 #endif // VE_INPUT_EVENT_GENERATOR_H

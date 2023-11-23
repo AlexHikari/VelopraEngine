@@ -1,8 +1,13 @@
-#include "Camera.h"
+#include "VE_OpenGLCamera.h"
+#include "VE_RenderUtils.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED),
-      MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
+namespace velopraEngine {
+namespace render {
+
+OpenGLCamera::OpenGLCamera(glm::vec3 position, glm::vec3 up, float yaw,
+                           float pitch)
+    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(2.5f),
+      MouseSensitivity(0.1f), Zoom(45.0f) {
   Position = position;
   WorldUp = up;
   Yaw = yaw;
@@ -10,11 +15,11 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
   updateCameraVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix() {
-  return glm::lookAt(Position, Position + Front, Up);
+core::Matrix4 OpenGLCamera::GetViewMatrix() {
+  return core::Matrix4(ConvertFromGLMMat4(glm::lookAt(Position, Position + Front, Up)));
 }
 
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
+void OpenGLCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
   float velocity = MovementSpeed * deltaTime;
   if (direction == FORWARD)
     Position += Front * velocity;
@@ -26,8 +31,8 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     Position += Right * velocity;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset,
-                                  GLboolean constrainPitch) {
+void OpenGLCamera::ProcessMouseMovement(float xoffset, float yoffset,
+                          bool constrainPitch) {
   xoffset *= MouseSensitivity;
   yoffset *= MouseSensitivity;
 
@@ -44,7 +49,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset,
   updateCameraVectors();
 }
 
-void Camera::ProcessMouseScroll(float yoffset) {
+void OpenGLCamera::ProcessMouseScroll(float yoffset) {
   Zoom -= yoffset;
   if (Zoom < 1.0f)
     Zoom = 1.0f;
@@ -52,7 +57,7 @@ void Camera::ProcessMouseScroll(float yoffset) {
     Zoom = 45.0f;
 }
 
-void Camera::updateCameraVectors() {
+void OpenGLCamera::updateCameraVectors() {
   glm::vec3 front;
   front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
   front.y = sin(glm::radians(Pitch));
@@ -61,3 +66,6 @@ void Camera::updateCameraVectors() {
   Right = glm::normalize(glm::cross(Front, WorldUp));
   Up = glm::normalize(glm::cross(Right, Front));
 }
+
+} // namespace render
+} // namespace velopraEngine

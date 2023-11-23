@@ -4,10 +4,13 @@
 #include "VE_Math.h"
 #include <vector>
 
+namespace velopraEngine {
+namespace render {
+
 struct Vertex {
-  VelopraEngine::Core::Vector3 position;
-  VelopraEngine::Core::Vector3 normal;
-  VelopraEngine::Core::Vector2 texCoords;
+  core::Vector3 position;
+  core::Vector3 normal;
+  core::Vector2 texCoords;
 };
 
 class IMesh {
@@ -15,5 +18,8 @@ public:
   virtual ~IMesh() = default;
   virtual void Draw() const = 0;
 };
+
+} // namespace render
+} // namespace velopraEngine
 
 #endif // VE_IMESH_H

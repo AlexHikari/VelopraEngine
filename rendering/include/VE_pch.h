@@ -9,6 +9,8 @@
 #include <assimp/scene.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 // Standard Library headers
 #include <fstream>
@@ -25,5 +27,6 @@
 #include "VE_Core.h"
 #include "VE_LoggerMacros.h"
 #include "VE_Math.h"
+#include "VE_RenderUtils.h"
 
 #endif // VE_RENDERING_PCH_H
