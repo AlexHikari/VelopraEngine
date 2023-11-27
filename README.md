@@ -1,7 +1,13 @@
-# Velopra Engine
+<h1 align="center">Velopra Engine </h1>
+<p align="center">
+  <a href="https://opensource.org/licenses/Apache-2.0">
+    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License">
+  </a>
+</p>
 
-![VelopraLogo](https://github.com/AlexHikari/VelopraEngine/assets/15806836/30175ac7-1443-4ac9-8e43-8d6c17538a47)
-
+<p align="center">
+  <img src="https://github.com/AlexHikari/VelopraEngine/assets/15806836/30175ac7-1443-4ac9-8e43-8d6c17538a47" alt="VelopraLogo">
+</p>
 
 The Velopra Engine is a versatile game engine designed for developing both 2D and 3D games. This project is primarily built for research purposes and as a learning platform for game engine architecture and advanced C++ techniques.
 
@@ -128,10 +134,6 @@ This ensures that the build process is consistent with the configurations define
 ## Contributing
 
 Contributions are currently closed but will open in the future as the engine evolves.
-
-## License
-
-Velopra Engine is under the MIT License. Refer to the LICENSE file for more information.
 
 ## Distribution
 
