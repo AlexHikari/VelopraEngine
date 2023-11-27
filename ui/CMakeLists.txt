@@ -1,4 +1,4 @@
-# input/CMakeLists.txt
+# ui/CMakeLists.txt
 cmake_minimum_required(VERSION 3.8)
 project(VelopraUI)
 
@@ -10,24 +10,32 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(UI_SOURCE_FILES   
-    src/MainWindow.cpp
-    src/QtOpenGLWidget.cpp
-    src/UIManager.cpp
-    src/WindowManager.cpp
+    src/VE_MainWindow.cpp
+    src/VE_QtOpenGLWidget.cpp
+    src/VE_RenderWidgetFactory.cpp
+    src/VE_UIManager.cpp
+    src/VE_WindowManager.cpp
 )
 
 set(UI_HEADER_FILES
-    include/MainWindow.h
-    include/QtOpenGLWidget.h
-    include/UIManager.h
-    include/WindowManager.h
+    include/VE_IRenderWidget.h
+    include/VE_MainWindow.h
+    include/VE_QtOpenGLWidget.h
+    include/VE_RenderTypes.h
+    include/VE_RenderWidgetFactory.h
+    include/VE_UIApi.h
+    include/VE_UIManager.h
+    include/VE_WindowManager.h
 )
 
 
 # Create the UI library
 add_library(VelopraUI ${UI_SOURCE_FILES} ${UI_HEADER_FILES})
 
-# Include directories for Qt
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(VelopraUI PRIVATE BUILDING_UI_DLL)
+endif()
+
 target_include_directories(VelopraUI PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${Qt5Widgets_INCLUDE_DIRS} 

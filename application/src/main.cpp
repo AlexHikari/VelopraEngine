@@ -1,21 +1,24 @@
-#include "UIManager.h"
+#include "VE_InputUpdateLayer.h"
+#include "VE_UIManager.h"
+#include "VE_Core.h"
 #include "VE_Logger.h"
 #include "VE_LoggerMacros.h"
-#include "VE_Core.h"
 #include "VE_Time.h"
-#include "InputUpdateLayer.h"
-#include "WindowManager.h"
+#include "VE_RenderTypes.h"
+#include "VE_WindowManager.h"
 
-int main(int argc, char* argv[]) {
-	// Initialize Core and other systems
-	auto& core = Core::Instance();
-	Logger::Init();
-	auto inputUpdateLayer = std::make_shared<InputUpdateLayer>();
-	VELOPRA_CORE_INFO("Starting Velopra Engine");
+using namespace velopraEngine;
 
-	auto windowManager = std::make_shared<WindowManager>();
+int main(int argc, char *argv[]) {
+  // Initialize Core and other systems
+  auto &core = core::Core::Instance();
+  core::Logger::Init();
+  auto inputUpdateLayer = std::make_shared<input::InputUpdateLayer>();
+  VELOPRA_CORE_INFO("Starting Velopra Engine");
 
-	// Initialize and run the UI
-	UIManager uiManager(argc, argv, windowManager);
-	return uiManager.Run();
+  auto windowManager = std::make_shared<ui::WindowManager>();
+
+  // Initialize and run the UI
+  ui::UIManager uiManager(argc, argv, ui::RenderType::OpenGL, windowManager);
+  return uiManager.Run();
 }

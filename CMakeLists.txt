@@ -1,6 +1,8 @@
 ﻿# Top-Level CMakeLists.txt
 cmake_minimum_required (VERSION 3.8)
 
+set(MODULE_NAMES "core" "input" "rendering" "ui")
+set(EXAMPLE_DIR "${CMAKE_SOURCE_DIR}/example")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -14,6 +16,9 @@ if (POLICY CMP0141)
 endif()
 
 project("VelopraEngine")
+
+# Option to control building of shared or static libraries
+option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)" ON)
 
 # Include subdirectories for each module
 add_subdirectory("core")

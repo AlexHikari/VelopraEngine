@@ -1,29 +1,33 @@
 #ifndef VE_KEYBOARD_EVENT_H
 #define VE_KEYBOARD_EVENT_H
 
+#include "VE_CoreAPI.h"
 #include "VE_Event.h"
 
-class KeyPressedEvent : public Event {
+namespace velopraEngine {
+namespace core {
+
+class VELOPRACORE_API KeyPressedEvent : public Event {
 public:
-	KeyPressedEvent(int keycode, int repeatCount)
-		: KeyCode(keycode), RepeatCount(repeatCount) {}
+  KeyPressedEvent(int keycode, int repeatCount);
 
-	EventType GetEventType() const override { return EventType::KeyPressed; }
-	const char* GetName() const override { return "KeyPressed"; }
+  EventType GetEventType() const override;
+  const char *GetName() const override;
 
-	int KeyCode, RepeatCount;
+  int KeyCode, RepeatCount;
 };
 
-class KeyReleasedEvent : public Event {
+class VELOPRACORE_API KeyReleasedEvent : public Event {
 public:
-	KeyReleasedEvent(int keycode)
-		: KeyCode(keycode) {}
+  KeyReleasedEvent(int keycode);
 
-	EventType GetEventType() const override { return EventType::KeyReleased; }
-	const char* GetName() const override { return "KeyReleased"; }
+  EventType GetEventType() const override;
+  const char *GetName() const override;
 
-	int KeyCode;
+  int KeyCode;
 };
 
+} // namespace core
+} // namespace velopraEngine
 
 #endif // VE_KEYBOARD_EVENT_H

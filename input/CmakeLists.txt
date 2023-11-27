@@ -3,16 +3,22 @@ cmake_minimum_required(VERSION 3.8)
 project(VelopraInputSystem)
 
 set(INPUT_SOURCE_FILES
-    src/InputEventGenerator.cpp
+    src/VE_InputEventGenerator.cpp
+    src/VE_InputUpdateLayer.cpp
 )
 set(INPUT_HEADER_FILES
-    include/InputEventGenerator.h
-    include/inputTypes.h
-    include/InputUpdateLayer.h
+    include/VE_InputAPI.h
+    include/VE_InputEventGenerator.h
+    include/VE_inputTypes.h
+    include/VE_InputUpdateLayer.h
 )
 
 # Create the InputSystem library
 add_library(VelopraInputSystem ${INPUT_SOURCE_FILES} ${INPUT_HEADER_FILES})
+
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(VelopraInputSystem PRIVATE BUILDING_VELOPRAINPUT_DLL)
+endif()
 
 # Include directories
 target_include_directories(VelopraInputSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

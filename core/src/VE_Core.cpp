@@ -1,44 +1,37 @@
 #include "VE_Core.h"
 
+namespace velopraEngine {
+namespace core {
+
 Core::Core()
-	: eventQueue(&EventQueue::Instance()), eventBus(&EventBus::Instance()) {
+    : eventQueue(&EventQueue::Instance()), eventBus(&EventBus::Instance()) {}
+
+Core &Core::Instance() {
+  static Core instance;
+  return instance;
 }
 
-Core& Core::Instance() {
-	static Core instance;
-	return instance;
+EventQueue *Core::GetEventQueue() { return eventQueue; }
+
+EventBus *Core::GetEventBus() { return eventBus; }
+
+void Core::PushLayer(Layer *layer) {
+  layerStack.PushLayer(layer);
+  layer->OnAttach();
 }
 
-EventQueue* Core::GetEventQueue() {
-	return eventQueue;
+void Core::PushOverlay(Layer *overlay) {
+  layerStack.PushOverlay(overlay);
+  overlay->OnAttach();
 }
 
-EventBus* Core::GetEventBus() {
-	return eventBus;
-}
+LayerStack::iterator Core::begin() { return layerStack.begin(); }
 
-void Core::PushLayer(Layer* layer) {
-	layerStack.PushLayer(layer);
-	layer->OnAttach();
-}
+LayerStack::iterator Core::end() { return layerStack.end(); }
 
-void Core::PushOverlay(Layer* overlay) {
-	layerStack.PushOverlay(overlay);
-	overlay->OnAttach();
-}
+LayerStack::reverse_iterator Core::rbegin() { return layerStack.rbegin(); }
 
-LayerStack::iterator Core::begin() {
-	return layerStack.begin();
-}
+LayerStack::reverse_iterator Core::rend() { return layerStack.rend(); }
 
-LayerStack::iterator Core::end() {
-	return layerStack.end();
-}
-
-LayerStack::reverse_iterator Core::rbegin() {
-	return layerStack.rbegin();
-}
-
-LayerStack::reverse_iterator Core::rend() {
-	return layerStack.rend();
-}
+} // namespace core
+} // namespace velopraEngine
