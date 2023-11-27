@@ -8,32 +8,41 @@ add_executable(VelopraEngine src/main.cpp)
 target_link_libraries(VelopraEngine PRIVATE VelopraCore VelopraRenderer VelopraUI VelopraInputSystem)
 
 if(WIN32)
-    foreach(MODULE_NAME IN LISTS MODULE_NAMES)
-        foreach(CONFIG IN ITEMS Debug Release)
-            # Convert the configuration name to lowercase
-            string(TOLOWER "${CONFIG}" CONFIG_LOWER)
+    message(STATUS "Windows platform detected")
+    add_custom_command(TARGET VelopraEngine POST_BUILD
+        
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:VelopraCore>/VelopraCore.dll
+        $<TARGET_FILE_DIR:VelopraEngine>
+        COMMENT "Copying VelopraCore DLL to executable directory"
+    
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:VelopraRenderer>/VelopraRenderer.dll
+        $<TARGET_FILE_DIR:VelopraEngine>
+        COMMENT "Copying VelopraRenderer DLL to executable directory"
+    
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:VelopraUI>/VelopraUI.dll
+        $<TARGET_FILE_DIR:VelopraEngine>
+        COMMENT "Copying VelopraUI DLL to executable directory"
 
-            # Construct the DLL path
-            set(DLL_PATH "${CMAKE_SOURCE_DIR}/out/build/${CMAKE_VS_PLATFORM_NAME}-${CONFIG_LOWER}/${MODULE_NAME}/${CONFIG}")
-
-            # Check if the DLL path exists
-            if(EXISTS "${DLL_PATH}")
-                # Add custom command to copy DLLs
-                add_custom_command(TARGET VelopraEngine POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    "${DLL_PATH}"
-                    $<TARGET_FILE_DIR:VelopraEngine>
-                    COMMENT "Copying DLLs from ${DLL_PATH} to executable $<TARGET_FILE_DIR:VelopraEngine> directory")
-            endif()
-        endforeach()
-    endforeach()
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:VelopraInputSystem>/VelopraInputSystem.dll
+        $<TARGET_FILE_DIR:VelopraEngine>
+        COMMENT "Copying VelopraInputSystem DLL to executable directory"
+    )
 elseif(APPLE)
+    message(STATUS "Apple platform detected")
     # macOS-specific commands
     # Use install_name_tool or similar
 elseif(UNIX AND NOT APPLE)
+    message(STATUS "Unix platform detected")
     # Linux-specific commands
     # Install to /usr/local/lib or similar
+else()
+    message(WARNING "Platform not recognized")
 endif()
+
 
 add_custom_command(TARGET VelopraEngine POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory

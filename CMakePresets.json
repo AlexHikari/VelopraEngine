@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 3,
   "configurePresets": [
     {
@@ -7,15 +7,15 @@
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
-      "toolchainFile": "C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
       "cacheVariables": {
         "CMAKE_VERBOSE_MAKEFILE": "ON"
       },
-        "architecture": {
-          "value": "x64",
-          "strategy": "external"
-        }
-      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    },
       {
         "name": "x64-debug",
         "displayName": "x64 Debug",

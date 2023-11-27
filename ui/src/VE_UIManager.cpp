@@ -8,7 +8,8 @@ UIManager::UIManager(int argc, char *argv[], RenderType renderType,
                      std::shared_ptr<WindowManager> windowManager)
     : app(argc, argv),
       mainWindow(nullptr, windowManager,
-                 RenderWidgetFactory::CreateRenderWidget(renderType)) {
+                                  RenderWidgetFactory::CreateRenderWidget(
+                                      renderType, windowManager)) {
   mainWindow.show();
 }
 

@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "vcpkg": true, // Excludes the vcpkg directory
+        "vcpkg/**": true // Additionally excludes all subdirectories and files within vcpkg
+    },
+    "search.exclude": {
+        "vcpkg": true, // Excludes the vcpkg directory from search results
+        "vcpkg/**": true // Additionally excludes all subdirectories and files within vcpkg from search results
+    }
+}
