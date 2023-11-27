@@ -1,6 +1,7 @@
-![VelopraLogo](https://github.com/AlexHikari/VelopraEngine/assets/15806836/1892d66b-1832-4eed-a5a4-b2ccd028b48a)
-
 # Velopra Engine
+
+![VelopraLogo](https://github.com/AlexHikari/VelopraEngine/assets/15806836/30175ac7-1443-4ac9-8e43-8d6c17538a47)
+
 
 The Velopra Engine is a versatile game engine designed for developing both 2D and 3D games. This project is primarily built for research purposes and as a learning platform for game engine architecture and advanced C++ techniques.
 
