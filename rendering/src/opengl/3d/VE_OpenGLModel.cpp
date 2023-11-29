@@ -1,9 +1,9 @@
-#include "VE_OpenGLModel.h"
-#include "VE_ITexture.h"
-#include "VE_OpenGLMesh.h"
-#include "VE_OpenGLRenderer.h"
-#include "VE_OpenGLTexture.h"
 #include "VE_pch.h"
+#include "interfaces/VE_ITexture.h"
+#include "opengl/VE_OpenGLTexture.h"
+#include "opengl/3d/VE_OpenGLModel.h"
+#include "opengl/3d/VE_OpenGLMesh.h"
+#include "opengl/3d/VE_OpenGLRenderer.h"
 
 namespace velopraEngine {
 namespace render {

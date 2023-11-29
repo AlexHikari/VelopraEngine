@@ -1,14 +1,14 @@
 #ifndef VE_OPENGL_RENDERER_H
 #define VE_OPENGL_RENDERER_H
 
-#include "VE_ICamera.h"
-#include "VE_IRenderer.h"
-#include "VE_ITexture.h"
-#include "VE_IShader.h"
-#include "VE_IModel.h"
-#include "VE_IWindowSizeObserver.h"
-#include "VE_RendererAPI.h"
 #include <GL/glew.h>
+#include "interfaces/VE_ICamera.h"
+#include "interfaces/VE_IRenderer.h"
+#include "interfaces/VE_ITexture.h"
+#include "interfaces/VE_IShader.h"
+#include "interfaces/VE_IModel.h"
+#include "interfaces/VE_IWindowSizeObserver.h"
+#include "VE_RendererAPI.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -19,7 +19,7 @@ namespace render {
 class VELOPRARENDERER_API OpenGLRenderer : public IWindowSizeObserver,
                                            public IRenderer {
 public:
-  OpenGLRenderer();
+  OpenGLRenderer(int width, int height);
   ~OpenGLRenderer() = default;
 
   void Initialize() override;
@@ -36,6 +36,7 @@ private:
   std::unique_ptr<IModel> model;
   std::unique_ptr<ICamera> camera;
   core::Matrix4 projectionMatrix;
+  int width, height;
   float aspectRatio;
 };
 

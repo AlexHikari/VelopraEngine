@@ -1,8 +1,7 @@
-// OpenGLTransform.h
 #ifndef VE_OPENGLTRANSFORM_H
 #define VE_OPENGLTRANSFORM_H
 
-#include "VE_ITransform.h"
+#include "interfaces/VE_ITransform.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>

@@ -1,8 +1,8 @@
 #ifndef VE_OPENGLMESH_H
 #define VE_OPENGLMESH_H
 
-#include "VE_IMesh.h"
 #include <GL/glew.h>
+#include "interfaces/VE_IMesh.h"
 #include <vector>
 
 namespace velopraEngine {

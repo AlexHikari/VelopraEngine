@@ -1,5 +1,8 @@
-#include "VE_OpenGLCamera.h"
+#include "VE_pch.h"
+#include "opengl/3d/VE_OpenGLCamera.h"
 #include "VE_RenderUtils.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace velopraEngine {
 namespace render {
@@ -15,8 +18,22 @@ OpenGLCamera::OpenGLCamera(glm::vec3 position, glm::vec3 up, float yaw,
   updateCameraVectors();
 }
 
-core::Matrix4 OpenGLCamera::GetViewMatrix() {
+core::Matrix4 OpenGLCamera::GetViewMatrix() const {
   return core::Matrix4(ConvertFromGLMMat4(glm::lookAt(Position, Position + Front, Up)));
+}
+
+core::Matrix4 OpenGLCamera::GetProjectionMatrix() const {
+  // Perspective parameters: Field of View, aspect ratio, near plane, and far
+  // plane
+  float fov = glm::radians(Zoom); // Convert Zoom angle to radians
+  float aspectRatio = static_cast<float>(GetWindowWidth()) / GetWindowHeight();
+  float nearPlane = 0.1f;
+  float farPlane = 100.0f;
+
+  glm::mat4 projection =
+      glm::perspective(fov, aspectRatio, nearPlane, farPlane);
+  return core::Matrix4(ConvertFromGLMMat4(
+      projection)); // Assuming you have a conversion function
 }
 
 void OpenGLCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {

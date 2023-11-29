@@ -1,5 +1,5 @@
-#include "VE_OpenGLMesh.h"
 #include "VE_pch.h"
+#include "opengl/3d/VE_OpenGLMesh.h"
 
 namespace velopraEngine {
 namespace render {

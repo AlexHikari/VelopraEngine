@@ -1,5 +1,5 @@
-#include "VE_RenderUtils.h"
 #include "VE_pch.h"
+#include "VE_RenderUtils.h"
 
 namespace velopraEngine {
 namespace render {

@@ -2,9 +2,10 @@
 #define VE_QT_OPENGL_WIDGET_H
 
 #include "VE_IRenderWidget.h"
-#include "VE_OpenGLRenderer.h"
 #include "VE_UIApi.h"
 #include "VE_WindowManager.h"
+#include "interfaces/VE_IRenderer.h"
+#include <GL/glew.h>
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <memory>
@@ -19,7 +20,8 @@ class VELOPRAUI_API QtOpenGLWidget : public QOpenGLWidget,
 
 public:
   QtOpenGLWidget(QWidget *parent = nullptr,
-                 std::shared_ptr<WindowManager> windowManager = nullptr);
+                 std::shared_ptr<WindowManager> windowManager = nullptr,
+                 bool use2DRenderer = false);
   ~QtOpenGLWidget();
 
   void InitializeRenderer() override;
@@ -29,6 +31,10 @@ public:
   void keyPressEvent(QKeyEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
+  void showEvent(QShowEvent *event) override;
+
+public slots:
+  void initializeRenderer();
 
 protected:
   void initializeGL() override;
@@ -36,8 +42,9 @@ protected:
   void paintGL() override;
 
 private:
-  std::shared_ptr<render::OpenGLRenderer> renderer;
+  std::shared_ptr<render::IRenderer> renderer;
   std::shared_ptr<WindowManager> windowManager;
+  bool use2D;
 };
 
 } // namespace ui

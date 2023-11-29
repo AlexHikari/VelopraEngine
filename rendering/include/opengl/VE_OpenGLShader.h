@@ -1,8 +1,8 @@
 #ifndef VE_OPENGL_SHADER_H
 #define VE_OPENGL_SHADER_H
 
-#include "VE_IShader.h"
 #include <GL/glew.h>
+#include "interfaces/VE_IShader.h"
 #include <unordered_map>
 
 namespace velopraEngine {

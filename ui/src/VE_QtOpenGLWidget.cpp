@@ -1,23 +1,43 @@
 #include "VE_QtOpenGLWidget.h"
 #include "VE_LoggerMacros.h"
+#include "opengl/3d/VE_OpenGLRenderer.h"
+#include "opengl/VE_OpenGLTextureLoader.h"
+#include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include <QTimer>
 
 namespace velopraEngine {
 namespace ui {
 
 QtOpenGLWidget::QtOpenGLWidget(QWidget *parent,
-                               std::shared_ptr<WindowManager> windowManager)
-    : QOpenGLWidget(parent), windowManager(windowManager) {
+                               std::shared_ptr<WindowManager> windowManager,
+                               bool use2DRenderer)
+    : QOpenGLWidget(parent), windowManager(windowManager),
+      use2D(use2DRenderer) {
 
   QOpenGLWidget::setMouseTracking(
       true); // This directly calls QOpenGLWidget's setMouseTracking
-  renderer = std::make_shared<render::OpenGLRenderer>();
-
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this,
           QOverload<>::of(&QtOpenGLWidget::update));
   timer->start(16); // approximately 60 fps
   VELOPRA_CORE_INFO("QT OpenGLWidget created");
+}
+
+void QtOpenGLWidget::initializeRenderer() {
+  int width = this->width();
+  int height = this->height();
+
+  if (use2D) {
+    renderer = std::make_shared<render::OpenGL2DRenderer>(
+        std::make_shared<render::OpenGLTextureLoader>(), width, height);
+  } else {
+    renderer = std::make_shared<render::OpenGLRenderer>(width, height);
+  }
+}
+
+void QtOpenGLWidget::showEvent(QShowEvent *event) {
+  QOpenGLWidget::showEvent(event);
+  initializeRenderer();
 }
 
 QtOpenGLWidget::~QtOpenGLWidget() {}
@@ -63,16 +83,16 @@ void QtOpenGLWidget::mouseMoveEvent(QMouseEvent *event) {
   // ... other mouse move handling
 }
 
-void QtOpenGLWidget::InitializeRenderer() { 
-    //nothing to initialize here
+void QtOpenGLWidget::InitializeRenderer() {
+  // nothing to initialize here
 }
 
 void QtOpenGLWidget::ResizeRenderer(int width, int height) {
   resizeGL(width, height);
 }
 
-void QtOpenGLWidget::Render() { 
-////nothing to render here
+void QtOpenGLWidget::Render() {
+  ////nothing to render here
 }
 
 } // namespace ui

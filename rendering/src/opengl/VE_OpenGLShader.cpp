@@ -1,5 +1,5 @@
-#include "VE_OpenGLShader.h"
 #include "VE_pch.h"
+#include "opengl/VE_OpenGLShader.h"
 
 namespace velopraEngine {
 namespace render {

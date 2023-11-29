@@ -1,7 +1,7 @@
 #ifndef VE_WINDOW_MANAGER_H
 #define VE_WINDOW_MANAGER_H
 
-#include "VE_IWindowSizeObserver.h"
+#include "interfaces/VE_IWindowSizeObserver.h"
 #include "VE_UIApi.h"
 #include <QKeyEvent>
 #include <QMouseEvent>

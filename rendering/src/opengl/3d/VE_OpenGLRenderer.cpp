@@ -1,20 +1,19 @@
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-
-#include "VE_OpenGLRenderer.h"
-#include "VE_RenderUtils.h"
-#include "VE_OpenGLCamera.h"
-#include "VE_OpenGLModel.h"
-#include "VE_OpenGLTexture.h"
-#include "VE_OpenGlShader.h"
 #include "VE_pch.h"
+
+#include "opengl/3d/VE_OpenGLRenderer.h"
+#include "VE_RenderUtils.h"
+#include "opengl/3d/VE_OpenGLCamera.h"
+#include "opengl/3d/VE_OpenGLModel.h"
+#include "opengl/VE_OpenGLTexture.h"
+#include "opengl/VE_OpenGlShader.h"
 #include "stb_image.h"
 
 namespace velopraEngine {
 namespace render {
 
-OpenGLRenderer::OpenGLRenderer()
-    : shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f) {
+OpenGLRenderer::OpenGLRenderer(int width, int height)
+    : shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f),
+      width(width), height(height) {
   projectionMatrix =
       core::Matrix4::Perspective(45.0f, aspectRatio, 0.1f, 100.0f);
 }
@@ -29,13 +28,14 @@ void OpenGLRenderer::Initialize() {
 
   camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 100.0f));
   model = std::make_unique<OpenGLModel>("model.obj", *this);
-  shader = std::make_unique<OpenGLShader>("vertex_shader.glsl", "fragment_shader.glsl");
-  
+  shader = std::make_unique<OpenGLShader>("vertex_shader.glsl",
+                                          "fragment_shader.glsl");
+
   model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -100.0f));
 
-  aspectRatio = 800.0f / 600.0f;
+  aspectRatio = static_cast<float>(width / height);
 
-  UpdateProjectionMatrix(800, 600);
+  UpdateProjectionMatrix(width, height);
   VELOPRA_CORE_INFO("OpenGL Renderer initialized successfully.");
 }
 
@@ -95,7 +95,10 @@ OpenGLRenderer::LoadTexture(const std::string &filePath) {
   glGenerateMipmap(GL_TEXTURE_2D);
   stbi_image_free(data);
 
-  auto texture = std::make_shared<OpenGLTexture>(textureID);
+  std::vector<uint8_t> textureData(data, data + (width * height * nrChannels));
+
+  auto texture = std::make_shared<OpenGLTexture>(textureID, width, height,
+                                                 textureData, filePath);
   textureCache[filePath] = texture;
 
   VELOPRA_CORE_INFO("Texture loaded successfully: {}", filePath);
@@ -116,5 +119,3 @@ void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
 
 } // namespace render
 } // namespace velopraEngine
-
-#endif

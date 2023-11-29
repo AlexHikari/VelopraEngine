@@ -12,13 +12,18 @@ class ICamera {
 public:
   virtual ~ICamera() = default;
 
-  virtual core::Matrix4 GetViewMatrix() = 0;
+  virtual core::Matrix4 GetViewMatrix() const = 0;
+  virtual core::Matrix4 GetProjectionMatrix() const = 0;
   virtual void ProcessKeyboard(Camera_Movement direction, float deltaTime) = 0;
   virtual void ProcessMouseMovement(float xoffset, float yoffset,
                                     bool constrainPitch = true) = 0;
   virtual void ProcessMouseScroll(float yoffset) = 0;
+  int GetWindowHeight() const { return windowHeigth; }
+  int GetWindowWidth() const { return windowWidth; }
 
-  // Additional common camera functionalities can be added here
+private:
+  int windowWidth;
+  int windowHeigth;
 };
 
 } // namespace render

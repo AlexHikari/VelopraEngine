@@ -1,11 +1,11 @@
 #ifndef VE_OPENGLMODEL_H
 #define VE_OPENGLMODEL_H
 
-#include "VE_IModel.h"
-#include "VE_ITransform.h"
-#include "VE_OpenGLTransform.h"
-#include "VE_OpenGLMesh.h"
-#include "VE_OpenGLRenderer.h"
+#include "interfaces/VE_IModel.h"
+#include "interfaces/VE_ITransform.h"
+#include "opengl/VE_OpenGLTransform.h"
+#include "opengl/3d/VE_OpenGLMesh.h"
+#include "opengl/3d/VE_OpenGLRenderer.h"
 #include <string>
 #include <vector>
 #include <memory>

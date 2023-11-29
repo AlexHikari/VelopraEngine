@@ -2,7 +2,7 @@
 #define VE_CAMERA_H
 
 
-#include "VE_ICamera.h"
+#include "interfaces/VE_ICamera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -15,7 +15,9 @@ public:
                glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f,
                float pitch = 0.0f);
 
-  core::Matrix4 GetViewMatrix() override;
+  core::Matrix4 GetViewMatrix() const override;
+  core::Matrix4 GetProjectionMatrix() const override;
+
   void ProcessKeyboard(Camera_Movement direction, float deltaTime) override;
   void ProcessMouseMovement(float xoffset, float yoffset,
                             bool constrainPitch = true) override;
@@ -32,6 +34,7 @@ private:
   float Pitch;
   float MovementSpeed;
   float MouseSensitivity;
+  float ZoomSensitivity;
   float Zoom;
 
   void updateCameraVectors();
