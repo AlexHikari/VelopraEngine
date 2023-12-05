@@ -1,8 +1,9 @@
 #ifndef VE_EVENT_QUEUE_H
 #define VE_EVENT_QUEUE_H
 
-#include "VE_Event.h"
 #include "VE_CoreAPI.h"
+#include "VE_Event.h"
+#include "VE_IEventSubscriber.h"
 #include <memory>
 #include <queue>
 #include <unordered_map>
@@ -11,7 +12,7 @@
 namespace velopraEngine {
 namespace core {
 
-class EventSubscriber;
+class EventObserver;
 
 class VELOPRACORE_API EventQueue {
 public:
@@ -19,13 +20,13 @@ public:
 
   void PushEvent(const std::shared_ptr<Event> &event);
   void ProcessEvents();
-  void Subscribe(EventType type, EventSubscriber *subscriber);
-  void Unsubscribe(EventType type, EventSubscriber *subscriber);
+  void Subscribe(EventType type, IEventSubscriber *subscriber);
+  void Unsubscribe(EventType type, IEventSubscriber *subscriber);
 
 private:
   EventQueue() = default;
-  std::queue<std::shared_ptr<Event>> eventQueue;
-  std::unordered_map<EventType, std::vector<EventSubscriber *>> subscribers;
+  std::queue<std::shared_ptr<Event>> m_eventQueue;
+  std::unordered_map<EventType, std::vector<IEventSubscriber *>> m_subscribers;
 };
 
 } // namespace core

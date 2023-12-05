@@ -133,7 +133,7 @@ enum class VELOPRAINPUT_API MouseCode {
   Middle = Button2
 };
 
-} // namespace input
+} // namespace core
 } // namespace velopraEngine
 
 #endif // VE_INPUT_TYPES_H

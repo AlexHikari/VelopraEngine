@@ -3,6 +3,7 @@
 #include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include "opengl/2d/VE_OpenGLOrthoCamera.h"
 #include "opengl/VE_OpenGLShader.h"
+#include "VE_WindowEvent.h"
 #include "opengl/VE_OpenGLTextureAtlas.h"
 
 namespace velopraEngine {
@@ -12,7 +13,7 @@ OpenGL2DRenderer::OpenGL2DRenderer(
     std::shared_ptr<OpenGLTextureLoader> textureLoader, int windowWidth,
     int windowHeight)
     : textureLoader(textureLoader), windowWidth(windowWidth),
-      windowHeight(windowHeight) {
+      windowHeight(windowHeight), VBO(0), VAO(0) {
   // Constructor initialization
 }
 
@@ -44,6 +45,9 @@ void OpenGL2DRenderer::Initialize() {
                                                bottomBoundary, topBoundary);
 
   SetupBatchRendering();
+
+  core::Core::Instance().GetEventQueue()->Subscribe(core::EventType::WindowResize, this);
+
 }
 
 void OpenGL2DRenderer::BeginFrame() {
@@ -71,25 +75,31 @@ void OpenGL2DRenderer::RenderFrame() {
 
 std::shared_ptr<ITexture>
 OpenGL2DRenderer::LoadTexture(const std::string &filePath) {
-  VELOPRA_CORE_INFO("Requesting texture load: {}", filePath);
+  // Extract the filename from the filePath
+  size_t lastSlash = filePath.find_last_of("/\\");
+  std::string filename = lastSlash == std::string::npos
+                             ? filePath
+                             : filePath.substr(lastSlash + 1);
 
-  // Check if the texture is already in the atlas
-  if (textureAtlas->HasSubTexture(filePath)) {
-    VELOPRA_CORE_TRACE("Texture already in atlas");
+  VELOPRA_CORE_INFO("Requesting texture load: {}", filename);
+
+  // Check if the texture is already in the atlas using the filename
+  if (textureAtlas->HasSubTexture(filename)) {
+    VELOPRA_CORE_TRACE("Texture already in atlas: {}", filename);
     return textureAtlas->GetTexture(); // Return the atlas texture
   }
 
   // Load the texture and add it to the atlas
   auto texture = textureLoader->LoadTexture(filePath);
   if (!texture) {
-    VELOPRA_CORE_ERROR("Failed to load texture: {}", filePath);
+    VELOPRA_CORE_ERROR("Failed to load texture: {}", filename);
     return nullptr;
   }
 
-  // Add the texture to the atlas
-  textureAtlas->AddTexture(filePath, texture);
+  // Add the texture to the atlas using the filename
+  textureAtlas->AddTexture(filename, texture);
 
-  VELOPRA_CORE_INFO("Texture added to atlas: {}", filePath);
+  VELOPRA_CORE_INFO("Texture added to atlas: {}", filename);
   return textureAtlas->GetTexture();
 }
 
@@ -165,9 +175,15 @@ void OpenGL2DRenderer::NextBatch() {
   StartBatch();
 }
 
-void OpenGL2DRenderer::AddQuad(const glm::vec2 &position, const glm::vec2 &size,
-                               const glm::vec4 &color,
+void OpenGL2DRenderer::AddQuad(const core::Vector2 &position,
+                               const core::Vector2 &size,
+                               const core::Vector4 &color, const float rotation,
                                std::shared_ptr<ITexture> texture) {
+
+  glm::vec2 glmPosition = ConvertToGLMVec2(position);
+  glm::vec2 glmSize = ConvertToGLMVec2(size);
+  glm::vec4 glmColor = ConvertToGLMVec4(color);
+
   if (currentBatch->numVertices + 6 > MAX_BATCH_SIZE) {
     FlushBatch(); // Flush and start a new batch if the current one is full
   }
@@ -188,13 +204,24 @@ void OpenGL2DRenderer::AddQuad(const glm::vec2 &position, const glm::vec2 &size,
     texCoords[3] = glm::vec2(0.0f, 1.0f);
   }
 
-  // Calculate vertex positions
+  // Rotation transformation
+  glm::mat4 transform =
+      glm::translate(glm::mat4(1.0f), glm::vec3(glmPosition, 0.0f)) *
+      glm::rotate(glm::mat4(1.0f), glm::radians(rotation),
+                  glm::vec3(0.0f, 0.0f, 1.0f)) *
+      glm::translate(glm::mat4(1.0f),
+                     glm::vec3(-glmSize / 2.0f, 0.0f)); // Center the rotation
+
+  // Calculate vertex positions with rotation
   glm::vec2 vertices[4];
-  vertices[0] = position;                                   // Top-left
-  vertices[1] = glm::vec2(position.x + size.x, position.y); // Top-right
-  vertices[2] =
-      glm::vec2(position.x + size.x, position.y + size.y);  // Bottom-right
-  vertices[3] = glm::vec2(position.x, position.y + size.y); // Bottom-left
+  vertices[0] = transform * glm::vec4(-glmSize.x / 2, glmSize.y / 2, 0.0f,
+                                      1.0f); // Top-left
+  vertices[1] = transform * glm::vec4(glmSize.x / 2, glmSize.y / 2, 0.0f,
+                                      1.0f); // Top-right
+  vertices[2] = transform * glm::vec4(glmSize.x / 2, -glmSize.y / 2, 0.0f,
+                                      1.0f); // Bottom-right
+  vertices[3] = transform * glm::vec4(-glmSize.x / 2, -glmSize.y / 2, 0.0f,
+                                      1.0f); // Bottom-left
 
   // Add vertex data to the batch
   for (int i = 0; i < 4; ++i) {
@@ -202,7 +229,7 @@ void OpenGL2DRenderer::AddQuad(const glm::vec2 &position, const glm::vec2 &size,
         vertices[i],                           // Position
         texCoords[i],                          // Texture coordinates
         texture ? texture->GetTextureId() : 0, // Texture ID
-        color                                  // Color
+        glmColor                               // Color
     });
   }
 
@@ -230,6 +257,13 @@ void OpenGL2DRenderer::OnWindowSizeChanged(int width, int height) {
     float topBoundary = 0.0f;
     orthoCamera->SetOrthoBounds(leftBoundary, rightBoundary, bottomBoundary,
                                 topBoundary);
+  }
+}
+
+void OpenGL2DRenderer::OnEvent(const core::Event &event) {
+  if (event.GetEventType() == core::EventType::WindowResize) {
+    auto &resizeEvent = static_cast<const core::WindowResizeEvent &>(event);
+    OnWindowSizeChanged(resizeEvent.Width, resizeEvent.Height);
   }
 }
 

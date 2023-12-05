@@ -2,7 +2,7 @@ param (
     [String]$VcpkgDir
 )
 
-$dependencies = @("opengl", "glew", "assimp", "glm", "qt5", "spdlog")
+$dependencies = @("opengl", "glew", "assimp", "glm", "qt5", "spdlog", "glfw3")
 
 # Get the list of already installed packages
 $installed = & "$VcpkgDir\vcpkg" list

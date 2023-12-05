@@ -12,7 +12,9 @@ namespace ui {
 
 class VELOPRAUI_API RenderWidgetFactory {
 public:
-  static std::unique_ptr<IRenderWidget> CreateRenderWidget(RenderType type, std::shared_ptr<WindowManager> wM);
+  static std::unique_ptr<IRenderWidget>
+  CreateRenderWidget(render::RenderType type,
+                     std::shared_ptr<WindowManager> wM);
 };
 
 } // namespace ui

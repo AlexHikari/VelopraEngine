@@ -67,6 +67,42 @@ struct VELOPRACORE_API Vector3 {
   }
 };
 
+struct VELOPRACORE_API Vector4 {
+  float32 x, y, z, w;
+
+  Vector4();
+  Vector4(float32 x, float32 y, float32 z, float32 w);
+
+  Vector4 operator+(const Vector4 &rhs) const {
+    return Vector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
+  }
+
+  Vector4 operator-(const Vector4 &rhs) const {
+    return Vector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+  }
+
+  Vector4 operator*(float32 scalar) const {
+    return Vector4(x * scalar, y * scalar, z * scalar, w * scalar);
+  }
+
+  Vector4 operator/(float32 scalar) const {
+    if (scalar == 0.0f) {
+      VELOPRA_CORE_ERROR("Attempted to divide Vector4 by zero.");
+      return Vector4(0.0f, 0.0f, 0.0f, 0.0f); // Return a zero vector
+    }
+    return Vector4(x / scalar, y / scalar, z / scalar, w / scalar);
+  }
+
+  static float32 Magnitude(const Vector4 &vec);
+  static Vector4 Normalize(const Vector4 &vec);
+  static float32 Dot(const Vector4 &lhs, const Vector4 &rhs);
+  static Vector4 Lerp(const Vector4 &start, const Vector4 &end, float32 t);
+
+  friend Vector4 operator*(float32 scalar, const Vector4 &vec) {
+    return vec * scalar;
+  }
+};
+
 struct VELOPRACORE_API Matrix4 {
   float32 m[4][4];
 

@@ -7,9 +7,9 @@
 namespace velopraEngine {
 namespace core {
 
-class VELOPRACORE_API EventSubscriber {
+class VELOPRACORE_API IEventSubscriber {
 public:
-  virtual ~EventSubscriber() = default;
+  virtual ~IEventSubscriber() = default;
   virtual void OnEvent(const Event &event) = 0;
 };
 

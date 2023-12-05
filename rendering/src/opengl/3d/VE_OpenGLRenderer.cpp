@@ -12,10 +12,10 @@ namespace velopraEngine {
 namespace render {
 
 OpenGLRenderer::OpenGLRenderer(int width, int height)
-    : shader(nullptr), model(nullptr), camera(nullptr), aspectRatio(0.0f),
-      width(width), height(height) {
-  projectionMatrix =
-      core::Matrix4::Perspective(45.0f, aspectRatio, 0.1f, 100.0f);
+    : m_shader(nullptr), m_model(nullptr), m_camera(nullptr),
+      m_aspectRatio(0.0f), m_width(width), m_height(height) {
+  m_projectionMatrix =
+      core::Matrix4::Perspective(45.0f, m_aspectRatio, 0.1f, 100.0f);
 }
 
 void OpenGLRenderer::Initialize() {
@@ -26,16 +26,16 @@ void OpenGLRenderer::Initialize() {
     return;
   }
 
-  camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 100.0f));
-  model = std::make_unique<OpenGLModel>("model.obj", *this);
-  shader = std::make_unique<OpenGLShader>("vertex_shader.glsl",
+  m_camera = std::make_unique<OpenGLCamera>(glm::vec3(0.0f, 0.0f, 100.0f));
+  m_model = std::make_unique<OpenGLModel>("model.obj", *this);
+  m_shader = std::make_unique<OpenGLShader>("vertex_shader.glsl",
                                           "fragment_shader.glsl");
 
-  model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -100.0f));
+  m_model->GetTransform().SetPosition(core::Vector3(0.0f, 0.0f, -100.0f));
 
-  aspectRatio = static_cast<float>(width / height);
+  m_aspectRatio = static_cast<float>(m_width / m_height);
 
-  UpdateProjectionMatrix(width, height);
+  UpdateProjectionMatrix(m_width, m_height);
   VELOPRA_CORE_INFO("OpenGL Renderer initialized successfully.");
 }
 
@@ -48,26 +48,27 @@ void OpenGLRenderer::BeginFrame() {
 void OpenGLRenderer::RenderFrame() {
   glEnable(GL_DEPTH_TEST);
 
-  shader->Bind();
-  if (!shader->ValidateProgram()) {
+  m_shader->Bind();
+  if (!m_shader->ValidateProgram()) {
     VELOPRA_CORE_ERROR("Shader program validation failed.");
     return;
   }
 
-  shader->SetUniformMat4f("u_Model", model->GetTransform().GetModelMatrix());
-  shader->SetUniformMat4f("u_View", camera->GetViewMatrix());
-  shader->SetUniformMat4f("u_Projection", projectionMatrix);
+  m_shader->SetUniformMat4f("u_Model",
+                            m_model->GetTransform().GetModelMatrix());
+  m_shader->SetUniformMat4f("u_View", m_camera->GetViewMatrix());
+  m_shader->SetUniformMat4f("u_Projection", m_projectionMatrix);
 
-  model->Draw();
-  shader->Unbind();
+  m_model->Draw();
+  m_shader->Unbind();
 }
 
 std::shared_ptr<ITexture>
 OpenGLRenderer::LoadTexture(const std::string &filePath) {
   VELOPRA_CORE_INFO("Loading texture: {}", filePath);
 
-  auto it = textureCache.find(filePath);
-  if (it != textureCache.end()) {
+  auto it = m_textureCache.find(filePath);
+  if (it != m_textureCache.end()) {
     VELOPRA_CORE_TRACE("Texture loaded from cache");
     return it->second;
   }
@@ -99,7 +100,7 @@ OpenGLRenderer::LoadTexture(const std::string &filePath) {
 
   auto texture = std::make_shared<OpenGLTexture>(textureID, width, height,
                                                  textureData, filePath);
-  textureCache[filePath] = texture;
+  m_textureCache[filePath] = texture;
 
   VELOPRA_CORE_INFO("Texture loaded successfully: {}", filePath);
   return texture;
@@ -108,12 +109,14 @@ OpenGLRenderer::LoadTexture(const std::string &filePath) {
 void OpenGLRenderer::OnWindowSizeChanged(int width, int height) {
   // Handle window size change, e.g., update projection matrix
   UpdateProjectionMatrix(width, height);
+  m_width = width;
+  m_height = height;
 }
 
 void OpenGLRenderer::UpdateProjectionMatrix(int width, int height) {
-  aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-  projectionMatrix = core::Matrix4::Perspective(glm::radians(90.0f),
-                                                aspectRatio, 0.1f, 100.0f);
+  m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+  m_projectionMatrix = core::Matrix4::Perspective(glm::radians(90.0f),
+                                                m_aspectRatio, 0.1f, 100.0f);
   glViewport(0, 0, width, height);
 }
 

@@ -20,6 +20,14 @@ core::Vector3 ConvertFromGLMVec3(const glm::vec3 &vec) {
   return core::Vector3(vec.x, vec.y, vec.z);
 }
 
+glm::vec4 ConvertToGLMVec4(const core::Vector4 &vec) {
+  return glm::vec4(vec.x, vec.y, vec.z, vec.w);
+}
+
+core::Vector4 ConvertFromGLMVec4(const glm::vec4 &vec) {
+  return core::Vector4(vec.x, vec.y, vec.z, vec.w);
+}
+
 glm::mat4 ConvertToGLMMat4(const core::Matrix4 &mat) {
   glm::mat4 glmMat;
   for (int i = 0; i < 4; ++i) {

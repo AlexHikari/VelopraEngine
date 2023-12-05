@@ -24,11 +24,13 @@ set(RENDERING_HEADER_FILES
     include/stb_image.h
     include/VE_pch.h
     include/VE_RendererAPI.h
+    include/VE_RenderTypes.h
     include/VE_RenderUtils.h
     include/interfaces/VE_ICamera.h
     include/interfaces/VE_IMesh.h
     include/interfaces/VE_IModel.h
     include/interfaces/VE_IRenderer.h
+    include/interfaces/VE_IRenderer2D.h
     include/interfaces/VE_IShader.h
     include/interfaces/VE_ITexture.h
     include/interfaces/VE_ITextureLoader.h

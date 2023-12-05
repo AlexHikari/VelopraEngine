@@ -3,7 +3,7 @@
 
 #include "VE_InputAPI.h"
 #include "VE_InputTypes.h"
-#include "VE_Event.h"
+#include <chrono>
 #include <unordered_map>
 #include <utility>
 
@@ -12,13 +12,16 @@ namespace input {
 
 class VELOPRAINPUT_API InputEventGenerator {
 public:
-  void Update(); // Called every frame to update input states
+  static InputEventGenerator &Instance();
 
-  // Keyboard state methods
+  void UpdateKeyState(KeyCode key, bool pressed);
+  void UpdateMouseButtonState(MouseCode button, bool pressed);
+  void UpdateMousePosition(float x, float y);
+
+  void Update();
+
   bool IsKeyPressed(KeyCode key) const;
   bool IsKeyReleased(KeyCode key) const;
-
-  // Mouse state methods
   bool IsMouseButtonPressed(MouseCode button) const;
   std::pair<float, float> GetMousePosition() const;
   float GetMouseX() const;
@@ -27,12 +30,18 @@ public:
 private:
   std::unordered_map<KeyCode, bool> keyStates;
   std::unordered_map<MouseCode, bool> mouseButtonStates;
+  std::unordered_map<MouseCode,
+                     std::chrono::high_resolution_clock::time_point>
+      lastClickTime;
+  std::unordered_map<KeyCode,
+                     std::chrono::high_resolution_clock::time_point>
+      keyPressStartTime;
+  std::unordered_map<KeyCode, bool> justPressedKeys;
   float mouseX, mouseY;
 
-  // Methods to update internal state
-  void UpdateKeyState(KeyCode key, bool pressed);
-  void UpdateMouseButtonState(MouseCode button, bool pressed);
-  void UpdateMousePosition(float x, float y);
+  void CheckDoubleClicks();
+  void CheckLongPresses();
+  void ResetTemporaryStates();
 };
 
 } // namespace input

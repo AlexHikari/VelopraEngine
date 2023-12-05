@@ -20,6 +20,8 @@ VELOPRARENDERER_API glm::vec2 ConvertToGLMVec2(const core::Vector2 &vec);
 VELOPRARENDERER_API core::Vector2 ConvertFromGLMVec2(const glm::vec2 &vec);
 VELOPRARENDERER_API glm::vec3 ConvertToGLMVec3(const core::Vector3 &vec);
 VELOPRARENDERER_API core::Vector3 ConvertFromGLMVec3(const glm::vec3 &vec);
+VELOPRARENDERER_API glm::vec4 ConvertToGLMVec4(const core::Vector4 &vec);
+VELOPRARENDERER_API core::Vector4 ConvertFromGLMVec4(const glm::vec4 &vec);
 VELOPRARENDERER_API glm::mat4 ConvertToGLMMat4(const core::Matrix4 &mat);
 VELOPRARENDERER_API core::Matrix4 ConvertFromGLMMat4(const glm::mat4 &glmMat);
 VELOPRARENDERER_API glm::quat ConvertToGLMQuat(const core::Quaternion &quat);

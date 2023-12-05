@@ -21,7 +21,6 @@ set(UI_HEADER_FILES
     include/VE_IRenderWidget.h
     include/VE_MainWindow.h
     include/VE_QtOpenGLWidget.h
-    include/VE_RenderTypes.h
     include/VE_RenderWidgetFactory.h
     include/VE_UIApi.h
     include/VE_UIManager.h

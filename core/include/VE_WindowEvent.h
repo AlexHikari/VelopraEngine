@@ -7,7 +7,7 @@
 namespace velopraEngine {
 namespace core {
 
-class WindowResizeEvent : public Event {
+class VELOPRACORE_API WindowResizeEvent : public Event {
 public:
   WindowResizeEvent(unsigned int width, unsigned int height);
 

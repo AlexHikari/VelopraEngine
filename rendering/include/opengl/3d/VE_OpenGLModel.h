@@ -23,10 +23,10 @@ public:
   ITransform &GetTransform() override;
 
 private:
-  std::vector<std::unique_ptr<OpenGLMesh>> meshes;
-  std::string directory;
-  OpenGLRenderer *renderer;
-  std::unique_ptr<ITransform> transform;
+  std::vector<std::unique_ptr<OpenGLMesh>> m_meshes;
+  std::string m_directory;
+  OpenGLRenderer *m_renderer;
+  std::unique_ptr<ITransform> m_transform;
 
   void LoadModel(const std::string &path);
   void ProcessNode(aiNode *node, const aiScene *scene);

@@ -15,7 +15,7 @@ fi
 echo "Installing dependencies"
 
 # List of dependencies
-dependencies=(opengl glew assimp glm qt5 spdlog)
+dependencies=(opengl glew assimp glm qt5 spdlog glfw3)
 
 # Install each dependency one by one
 for dep in "${dependencies[@]}"; do

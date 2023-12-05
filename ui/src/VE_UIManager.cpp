@@ -4,7 +4,7 @@
 namespace velopraEngine {
 namespace ui {
 
-UIManager::UIManager(int argc, char *argv[], RenderType renderType,
+UIManager::UIManager(int argc, char *argv[], render::RenderType renderType,
                      std::shared_ptr<WindowManager> windowManager)
     : app(argc, argv),
       mainWindow(nullptr, windowManager,

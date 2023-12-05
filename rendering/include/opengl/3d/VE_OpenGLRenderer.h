@@ -31,13 +31,13 @@ public:
   void UpdateProjectionMatrix(int width, int height);
 
 private:
-  std::unordered_map<std::string, std::shared_ptr<ITexture>> textureCache;
-  std::unique_ptr<IShader> shader;
-  std::unique_ptr<IModel> model;
-  std::unique_ptr<ICamera> camera;
-  core::Matrix4 projectionMatrix;
-  int width, height;
-  float aspectRatio;
+  std::unordered_map<std::string, std::shared_ptr<ITexture>> m_textureCache;
+  std::unique_ptr<IShader> m_shader;
+  std::unique_ptr<IModel> m_model;
+  std::unique_ptr<ICamera> m_camera;
+  core::Matrix4 m_projectionMatrix;
+  int m_width, m_height;
+  float m_aspectRatio;
 };
 
 } // namespace render

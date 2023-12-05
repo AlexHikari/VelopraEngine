@@ -14,6 +14,7 @@ set(CORE_SOURCE_FILES
     src/VE_Math.cpp
     src/VE_Memory.cpp
     src/VE_MouseEvent.cpp
+    src/VE_Time.cpp
     src/VE_Utility.cpp
     src/VE_WindowEvent.cpp
 )
@@ -23,7 +24,7 @@ set(CORE_HEADER_FILES
     include/VE_Event.h
     include/VE_EventBus.h
     include/VE_EventQueue.h
-    include/VE_EventSubscriber.h
+    include/VE_IEventSubscriber.h
     include/VE_KeyboardEvent.h
     include/VE_Layer.h
     include/VE_LayerStack.h
@@ -40,6 +41,7 @@ set(CORE_HEADER_FILES
 
 # Add library target for the Core module with the collected source files
 find_package(spdlog REQUIRED)
+
 add_library(VelopraCore ${CORE_SOURCE_FILES} ${CORE_HEADER_FILES})
 
 # Define BUILDING_VELOPRACORE_DLL when building as a shared library

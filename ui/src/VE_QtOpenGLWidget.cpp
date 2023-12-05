@@ -1,8 +1,8 @@
 #include "VE_QtOpenGLWidget.h"
 #include "VE_LoggerMacros.h"
+#include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include "opengl/3d/VE_OpenGLRenderer.h"
 #include "opengl/VE_OpenGLTextureLoader.h"
-#include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include <QTimer>
 
 namespace velopraEngine {
@@ -10,10 +10,13 @@ namespace ui {
 
 QtOpenGLWidget::QtOpenGLWidget(QWidget *parent,
                                std::shared_ptr<WindowManager> windowManager,
-                               bool use2DRenderer)
-    : QOpenGLWidget(parent), windowManager(windowManager),
-      use2D(use2DRenderer) {
+                               render::DimensionType dimensionType)
+    : QOpenGLWidget(parent), windowManager(windowManager) {
 
+  if (dimensionType == render::DimensionType::TwoD)
+    use2D = true;
+  else if (dimensionType == render::DimensionType::ThreeD)
+    use2D = false;
   QOpenGLWidget::setMouseTracking(
       true); // This directly calls QOpenGLWidget's setMouseTracking
   QTimer *timer = new QTimer(this);

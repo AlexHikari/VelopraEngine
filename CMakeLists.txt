@@ -15,7 +15,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-
+# For debugging included files
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /showIncludes")
 
 project("VelopraEngine")
@@ -27,5 +27,9 @@ option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)" ON)
 add_subdirectory("core")
 add_subdirectory("input")
 add_subdirectory("rendering")
+add_subdirectory("window_system")
+add_subdirectory("game_logic")
 add_subdirectory("ui")
-add_subdirectory("application")
+add_subdirectory("editor")
+add_subdirectory("framework")
+add_subdirectory("sandbox")

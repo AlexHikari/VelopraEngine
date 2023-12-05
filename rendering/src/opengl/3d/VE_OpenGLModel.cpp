@@ -9,13 +9,13 @@ namespace velopraEngine {
 namespace render {
 
 OpenGLModel::OpenGLModel(const std::string &path, OpenGLRenderer &renderer)
-    : renderer(&renderer), transform(std::make_unique<OpenGLTransform>()) {
+    : m_renderer(&renderer), m_transform(std::make_unique<OpenGLTransform>()) {
   LoadModel(path);
   VELOPRA_CORE_INFO("Loading model: {}", path);
 }
 
 void OpenGLModel::Draw() const {
-  for (const auto &mesh : meshes) {
+  for (const auto &mesh : m_meshes) {
     mesh->Draw();
   }
 }
@@ -31,7 +31,7 @@ void OpenGLModel::LoadModel(const std::string &path) {
     VELOPRA_CORE_ERROR("Assimp error: {}", importer.GetErrorString());
     return;
   }
-  directory = path.substr(0, path.find_last_of('/'));
+  m_directory = path.substr(0, path.find_last_of('/'));
 
   ProcessNode(scene->mRootNode, scene);
   VELOPRA_CORE_INFO("Model loaded");
@@ -41,7 +41,7 @@ void OpenGLModel::ProcessNode(aiNode *node, const aiScene *scene) {
   VELOPRA_CORE_INFO("Processing node: {}", node->mName.C_Str());
   for (unsigned int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    meshes.push_back(std::move(ProcessMesh(mesh, scene)));
+    m_meshes.push_back(std::move(ProcessMesh(mesh, scene)));
   }
 
   for (unsigned int i = 0; i < node->mNumChildren; i++) {
@@ -115,11 +115,11 @@ OpenGLModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type,
     aiString str;
     mat->GetTexture(type, i, &str);
     std::string filename = std::string(str.C_Str());
-    filename = directory + '/' + filename;
+    filename = m_directory + '/' + filename;
 
     VELOPRA_CORE_INFO("Loading texture: {}", filename);
 
-    std::shared_ptr<ITexture> texturePtr = renderer->LoadTexture(filename);
+    std::shared_ptr<ITexture> texturePtr = m_renderer->LoadTexture(filename);
     auto openglTexture = std::dynamic_pointer_cast<OpenGLTexture>(texturePtr);
     if (openglTexture) {
       GLuint textureID = openglTexture->GetTextureId();
@@ -130,10 +130,10 @@ OpenGLModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type,
 }
 
 void OpenGLModel::SetTransform(const ITransform &transform) {
-  *this->transform = transform;
+  *m_transform = transform;
 }
 
-ITransform &OpenGLModel::GetTransform() { return *transform; }
+ITransform &OpenGLModel::GetTransform() { return *m_transform; }
 
 } // namespace render
 } // namespace velopraEngine

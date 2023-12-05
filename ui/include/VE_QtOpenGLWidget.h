@@ -1,11 +1,12 @@
 #ifndef VE_QT_OPENGL_WIDGET_H
 #define VE_QT_OPENGL_WIDGET_H
 
+#include <GL/glew.h>
 #include "VE_IRenderWidget.h"
 #include "VE_UIApi.h"
 #include "VE_WindowManager.h"
 #include "interfaces/VE_IRenderer.h"
-#include <GL/glew.h>
+#include "VE_RenderTypes.h"
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <memory>
@@ -21,7 +22,7 @@ class VELOPRAUI_API QtOpenGLWidget : public QOpenGLWidget,
 public:
   QtOpenGLWidget(QWidget *parent = nullptr,
                  std::shared_ptr<WindowManager> windowManager = nullptr,
-                 bool use2DRenderer = false);
+                 render::DimensionType dimensionType = render::DimensionType::ThreeD);
   ~QtOpenGLWidget();
 
   void InitializeRenderer() override;

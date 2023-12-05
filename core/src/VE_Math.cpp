@@ -41,6 +41,31 @@ Vector3 Vector3::Lerp(const Vector3 &start, const Vector3 &end, float32 t) {
   return (1 - t) * start + t * end;
 }
 
+Vector4::Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+Vector4::Vector4(float32 x, float32 y, float32 z, float32 w) : x(x), y(y), z(z), w(w) {}
+
+float32 Vector4::Magnitude(const Vector4 &vec) {
+  return std::sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z +
+                   vec.w * vec.w);
+}
+
+Vector4 Vector4::Normalize(const Vector4 &vec) {
+  float32 mag = Magnitude(vec);
+  if (mag == 0.0f) {
+    VELOPRA_CORE_ERROR("Attempted to normalize a zero-length vector.");
+    return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+  return vec / mag;
+}
+
+float32 Vector4::Dot(const Vector4 &lhs, const Vector4 &rhs) {
+  return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
+}
+
+Vector4 Vector4::Lerp(const Vector4 &start, const Vector4 &end, float32 t) {
+  return (1 - t) * start + t * end;
+}
+
 Matrix4::Matrix4() {
   // Initialize to identity matrix
   for (int i = 0; i < 4; ++i) {

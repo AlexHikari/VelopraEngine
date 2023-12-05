@@ -106,7 +106,11 @@ def main():
         'core': './core',
         'input': './input',
         'rendering': './rendering',
-        'ui': './ui'
+        'ui': './ui',
+        'framework': './framework',
+        'sandbox': './sandbox',
+        'window_system': './window_system',
+        'game_logic': './game_logic',
     }
 
     for module, path in modules.items():

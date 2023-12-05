@@ -28,9 +28,9 @@ public:
   core::Matrix4 GetModelMatrix() const override;
 
 private:
-  glm::vec3 position;
-  glm::quat rotation;
-  glm::vec3 scale;
+  glm::vec3 m_position;
+  glm::quat m_rotation;
+  glm::vec3 m_scale;
 };
 
 } // namespace render
