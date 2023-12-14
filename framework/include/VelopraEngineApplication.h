@@ -4,6 +4,7 @@
 #include "VE_Event.h"
 #include "VE_EventQueue.h"
 #include "VE_GLFWWindow.h"
+#include "VE_FrameworkAPI.h"
 #include <memory>
 
 namespace velopraEngine {
@@ -14,7 +15,7 @@ class IRenderer;
 } // namespace render
 namespace framework {
 
-class VelopraEngineApplication {
+class VELOPRAFRAMEWORK_API VelopraEngineApplication {
 public:
   VelopraEngineApplication(render::RenderType type,
                            render::DimensionType dimensionType);

@@ -3,7 +3,6 @@
 
 #include "VE_IEventSubscriber.h"
 #include "interfaces/VE_ICamera.h"
-#include "interfaces/VE_IRenderer.h"
 #include "interfaces/VE_IShader.h"
 #include "interfaces/VE_ITexture.h"
 #include "interfaces/VE_IRenderer2D.h"
@@ -17,8 +16,7 @@
 namespace velopraEngine {
 namespace render {
 
-class VELOPRARENDERER_API OpenGL2DRenderer : public IRenderer,
-                                             public IRenderer2D,
+class VELOPRARENDERER_API OpenGL2DRenderer : public IRenderer2D,
                                              public core::IEventSubscriber {
 public:
   static constexpr size_t MAX_BATCH_SIZE = 1000;

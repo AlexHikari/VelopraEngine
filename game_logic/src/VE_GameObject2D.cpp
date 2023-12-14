@@ -18,9 +18,9 @@ void GameObject2D::Update(float deltaTime) {
   // Additional update logic...
 }
 
-void GameObject2D::Render(render::IRenderer2D &renderer) {
+void GameObject2D::Render(std::shared_ptr<render::IRenderer2D> renderer) {
   if (visible) {
-    renderer.AddQuad(position, size, color, rotation,
+    renderer->AddQuad(position, size, color, rotation,
                      texture); // Assuming AddQuad handles rotation
   }
 }

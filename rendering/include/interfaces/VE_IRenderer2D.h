@@ -2,13 +2,14 @@
 #define VE_IRENDERER2D_H
 
 #include "VE_ITexture.h"
+#include "interfaces/VE_IRenderer.h"
 #include "VE_Math.h"
 #include <memory>
 
 namespace velopraEngine {
 namespace render {
 
-class IRenderer2D {
+class IRenderer2D : public IRenderer {
 public:
   virtual ~IRenderer2D() = default;
 

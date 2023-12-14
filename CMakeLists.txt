@@ -1,7 +1,6 @@
 ﻿# Top-Level CMakeLists.txt
 cmake_minimum_required (VERSION 3.8)
 
-set(MODULE_NAMES "core" "input" "rendering" "ui")
 set(EXAMPLE_DIR "${CMAKE_SOURCE_DIR}/example")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,7 +15,7 @@ if (POLICY CMP0141)
 endif()
 
 # For debugging included files
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /showIncludes")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /showIncludes")
 
 project("VelopraEngine")
 
@@ -29,7 +28,7 @@ add_subdirectory("input")
 add_subdirectory("rendering")
 add_subdirectory("window_system")
 add_subdirectory("game_logic")
+add_subdirectory("framework")
 add_subdirectory("ui")
 add_subdirectory("editor")
-add_subdirectory("framework")
 add_subdirectory("sandbox")

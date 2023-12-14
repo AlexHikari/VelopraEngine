@@ -7,12 +7,13 @@ set(FRAMEWORK_SOURCE_FILES
 )
 set(FRAMEWORK_HEADER_FILES
     include/VelopraEngineApplication.h
+    include/VE_FrameworkAPI.h
 )
 
 # Create the Renderer library
 add_library(VelopraFramework ${FRAMEWORK_SOURCE_FILES} ${FRAMEWORK_HEADER_FILES})
 
-# Define BUILDING_RENDERER_DLL when building a shared library
+# Define BUILDING_FRAMEWORK_DLL when building a shared library
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(VelopraFramework PRIVATE BUILDING_FRAMEWORK_DLL)
 endif()

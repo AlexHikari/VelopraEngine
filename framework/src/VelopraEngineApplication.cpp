@@ -1,10 +1,10 @@
-#include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include "Opengl/3d/VE_OpenGLRenderer.h"
+#include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include "VE_Core.h"
 #include "VE_InputEventGenerator.h"
 #include "VE_LoggerMacros.h"
-#include "VE_Time.h"
 #include "VE_RenderTypes.h"
+#include "VE_Time.h"
 #include "interfaces/VE_IRenderer.h"
 #include "VelopraEngineApplication.h"
 
@@ -19,6 +19,26 @@ VelopraEngineApplication::VelopraEngineApplication(
 }
 
 VelopraEngineApplication::~VelopraEngineApplication() {}
+
+void VelopraEngineApplication::OnStart() {
+  // perform any initialization that is
+  // common across all applications derived from VelopraEngineApplication.
+  VELOPRA_CORE_INFO("VelopraEngineApplication started");
+}
+
+void VelopraEngineApplication::OnUpdate(float deltaTime) {
+  // handle tasks that need to be updated every frame in all applications,
+  // like updating the window or processing input events.
+  window->Update();
+}
+
+void VelopraEngineApplication::OnEvent(core::Event &event) {
+  // process events that are common to all applications, such as window close
+  // events.
+  if (event.GetEventType() == core::EventType::WindowClose) {
+    isRunning = false;
+  }
+}
 
 void VelopraEngineApplication::Run() {
   OnStart();

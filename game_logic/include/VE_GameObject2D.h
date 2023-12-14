@@ -21,7 +21,7 @@ public:
   virtual ~GameObject2D() = default;
 
   virtual void Update(float deltaTime);
-  virtual void Render(render::IRenderer2D &renderer);
+  virtual void Render(std::shared_ptr<render::IRenderer2D> renderer);
 
   void SetPosition(const core::Vector2 &newPosition);
   core::Vector2 GetPosition() const;

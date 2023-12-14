@@ -29,13 +29,13 @@ SandboxApp::~SandboxApp() {
 
 void SandboxApp::OnStart() {
   // Called once at the start
-  VELOPRA_CORE_INFO("SandboxApp started");
-  VelopraEngineApplication::OnStart();
+  VELOPRA_INFO("SandboxApp started");
+  velopraEngine::framework::VelopraEngineApplication::OnStart();
   // Load resources, initialize game objects, etc.
 }
 
 void SandboxApp::OnUpdate(float deltaTime) {
-  VelopraEngineApplication::OnUpdate(deltaTime);
+  velopraEngine::framework::VelopraEngineApplication::OnUpdate(deltaTime);
   // Game update logic
   // Example: Update game objects, handle input, etc.
   for (auto &gameObject : gameObjects) {
@@ -43,14 +43,18 @@ void SandboxApp::OnUpdate(float deltaTime) {
   }
   // Render each GameObject2D
   renderer->BeginFrame();
-  for (auto &gameObject : gameObjects) {
-    gameObject->Render(*renderer);
+  auto renderer2D =
+      std::dynamic_pointer_cast<velopraEngine::render::IRenderer2D>(renderer);
+  if (renderer2D) {
+    for (auto &gameObject : gameObjects) {
+      gameObject->Render(renderer2D);
+    }
   }
   renderer->RenderFrame();
 }
 
 void SandboxApp::OnEvent(velopraEngine::core::Event &event) {
-  VelopraEngineApplication::OnEvent(event);
+  velopraEngine::framework::VelopraEngineApplication::OnEvent(event);
   // Handle events
   // Example: Input handling, window resize, etc.
 }
