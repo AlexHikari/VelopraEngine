@@ -1,5 +1,7 @@
-#include "Opengl/3d/VE_OpenGLRenderer.h"
 #include "opengl/2d/VE_OpenGL2DRenderer.h"
+#include "Opengl/3d/VE_OpenGLRenderer.h"
+#include "opengl/2d/VE_OpenGLOrthoCamera.h"
+#include "opengl/3d/VE_OpenGLCamera.h"
 #include "VE_Core.h"
 #include "VE_InputEventGenerator.h"
 #include "VE_LoggerMacros.h"
@@ -16,6 +18,7 @@ VelopraEngineApplication::VelopraEngineApplication(
     : isRunning(false) {
   InitializeWindow("Main window", 800, 600);
   InitializeRenderer(renderType, dimensionType, 800, 600);
+  InitializeCamera(renderType, dimensionType, 800, 600);
 }
 
 VelopraEngineApplication::~VelopraEngineApplication() {}
@@ -78,6 +81,29 @@ void VelopraEngineApplication::InitializeRenderer(
   }
 }
 
+void VelopraEngineApplication::InitializeCamera(
+    render::RenderType renderType, render::DimensionType dimensionType,
+    int width, int height) {
+  switch (renderType) {
+  case render::RenderType::OpenGL: {
+    if (dimensionType == render::DimensionType::TwoD) {
+      camera = std::make_shared<render::OpenGLOrthoCamera>(
+          0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f);
+    } else if (dimensionType == render::DimensionType::ThreeD) {
+      // camera = std::make_unique<render::OpenGLCamera>(width, height);
+    }
+  } break;
+  case render::RenderType::Vulkan:
+    break;
+  case render::RenderType::DirectX:
+    break;
+  case render::RenderType::Metal:
+    break;
+  default:
+    VELOPRA_CORE_ERROR("Unsupported renderer type");
+  }
+}
+
 void VelopraEngineApplication::MainLoop() {
   isRunning = true;
   auto &time = core::Time::Instance();
@@ -91,6 +117,7 @@ void VelopraEngineApplication::MainLoop() {
     inputEventGenerator.Update();
 
     OnUpdate(deltaTime);
+    camera->Update(deltaTime);
 
     // Update rendering
     renderer->BeginFrame();

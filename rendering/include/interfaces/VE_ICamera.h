@@ -2,13 +2,14 @@
 #define VE_ICAMERA_H
 
 #include "VE_Math.h"
+#include "VE_RendererAPI.h"
 
 namespace velopraEngine {
 namespace render {
 
 enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT };
 
-class ICamera {
+class VELOPRARENDERER_API ICamera {
 public:
   virtual ~ICamera() = default;
 
@@ -18,6 +19,7 @@ public:
   virtual void ProcessMouseMovement(float xoffset, float yoffset,
                                     bool constrainPitch = true) = 0;
   virtual void ProcessMouseScroll(float yoffset) = 0;
+  virtual void Update(float deltaTime) = 0;
   int GetWindowHeight() const { return windowHeigth; }
   int GetWindowWidth() const { return windowWidth; }
 

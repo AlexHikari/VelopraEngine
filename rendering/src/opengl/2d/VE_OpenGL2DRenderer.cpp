@@ -34,8 +34,8 @@ void OpenGL2DRenderer::Initialize() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   // Initialize shader program
-  shader = std::make_unique<OpenGLShader>("vertex_shader.glsl",
-                                          "fragment_shader.glsl");
+  shader = std::make_unique<OpenGLShader>("2dVertex_shader.glsl",
+                                          "2dFragment_shader.glsl");
 
   float leftBoundary = 0.0f;
   float rightBoundary = static_cast<float>(windowWidth);

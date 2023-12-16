@@ -6,14 +6,21 @@ namespace render {
 OpenGLOrthoCamera::OpenGLOrthoCamera(float left, float right, float bottom,
                                      float top)
     : Position(0.0f, 0.0f), ZoomLevel(1.0f), Left(left), Right(right),
-      Bottom(bottom), Top(top), MouseSensitivity(0.02f),
-      ZoomSensitivity(0.02f) {
+      Bottom(bottom), Top(top), MouseSensitivity(0.02f), ZoomSensitivity(0.02f),
+      MovementSpeed(1.0f) {
+  UpdateProjection();
+}
+
+void OpenGLOrthoCamera::Update(float deltaTime) {
+  if (followCallback) {
+    followCallback(*this, deltaTime);
+  }
   UpdateProjection();
 }
 
 core::Matrix4 OpenGLOrthoCamera::GetViewMatrix() const {
   // it could be a translation matrix if the camera supports panning.
-return core::Matrix4(); // Identity matrix
+  return core::Matrix4(); // Identity matrix
 }
 
 void OpenGLOrthoCamera::ProcessKeyboard(Camera_Movement direction,
@@ -38,7 +45,9 @@ void OpenGLOrthoCamera::ProcessKeyboard(Camera_Movement direction,
 void OpenGLOrthoCamera::ProcessMouseMovement(float xoffset, float yoffset,
                                              bool constrainPitch) {
   Position.x -= xoffset * MouseSensitivity;
-  Position.y += yoffset * MouseSensitivity;
+  if (!constrainPitch) {
+    Position.y += yoffset * MouseSensitivity;
+  }
 }
 
 void OpenGLOrthoCamera::ProcessMouseScroll(float yoffset) {
@@ -70,6 +79,11 @@ void OpenGLOrthoCamera::SetOrthoBounds(float left, float right, float bottom,
 
 core::Matrix4 OpenGLOrthoCamera::GetProjectionMatrix() const {
   return core::Matrix4(ConvertFromGLMMat4(ProjectionMatrix));
+}
+
+void OpenGLOrthoCamera::SetFollowCallback(
+    const std::function<void(IFollowableCamera &, float)> &callback) {
+  followCallback = callback;
 }
 
 } // namespace render

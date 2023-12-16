@@ -84,5 +84,10 @@ void OpenGLCamera::updateCameraVectors() {
   Up = glm::normalize(glm::cross(Right, Front));
 }
 
+void OpenGLCamera::Update(float deltaTime) {
+  // adjusting the position, rotation, etc., based on input
+  // or other factors
+}
+
 } // namespace render
 } // namespace velopraEngine

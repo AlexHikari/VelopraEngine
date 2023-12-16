@@ -1,11 +1,11 @@
-#include "VE_LoggerMacros.h"
-#include "VE_Event.h"
-#include "VE_RenderTypes.h"
 #include "opengl/2d/VE_OpenGL2DRenderer.h"
+#include "opengl/2d/VE_OpenGLOrthoCamera.h"
 #include "SandboxApp.h"
+#include "VE_Event.h"
+#include "VE_LoggerMacros.h"
 #include "VE_Math.h"
+#include "VE_RenderTypes.h"
 #include <memory>
-
 
 SandboxApp::SandboxApp()
     : VelopraEngineApplication(velopraEngine::render::RenderType::OpenGL,
@@ -18,14 +18,32 @@ SandboxApp::~SandboxApp() {
   // Cleanup
 }
 
- void SandboxApp::InitializeGameObjects() {
+void SandboxApp::InitializeGameObjects() {
   auto texture = renderer->LoadTexture("path/to/texture.png");
-  auto gameObject = std::make_unique<velopraEngine::gameLogic::GameObject2D>(
+  auto gameObject = std::make_shared<velopraEngine::gameLogic::GameObject2D>(
       texture, velopraEngine::core::Vector2(10.0f, 10.0f),
       velopraEngine::core::Vector2(1.0f, 1.0f),
       velopraEngine::core::Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-  gameObjects.push_back(std::move(gameObject));
- }
+
+  // Assuming OpenGLOrthoCamera is a subclass of IFollowableCamera
+  camera->SetFollowCallback(
+      [this](velopraEngine::render::IFollowableCamera &cam,
+             float /* deltaTime */) {
+        auto orthoCam =
+            static_cast<velopraEngine::render::OpenGLOrthoCamera &>(cam);
+        if (!gameObjects.empty()) {
+          auto gameObject =
+              gameObjects
+                  .front(); // follow the first gameObject
+          auto position = gameObject->GetPosition();
+          orthoCam.SetPosition(
+              {position.x,
+               position.y}); // Update camera position to follow the gameObject
+        }
+      });
+
+  gameObjects.push_back(gameObject);
+}
 
 void SandboxApp::OnStart() {
   // Called once at the start

@@ -3,8 +3,8 @@
 
 #include "VE_Event.h"
 #include "VE_EventQueue.h"
-#include "VE_GLFWWindow.h"
 #include "VE_FrameworkAPI.h"
+#include "VE_GLFWWindow.h"
 #include <memory>
 
 namespace velopraEngine {
@@ -12,6 +12,7 @@ namespace render {
 enum class RenderType;
 enum class DimensionType;
 class IRenderer;
+class ICamera;
 } // namespace render
 namespace framework {
 
@@ -31,9 +32,13 @@ protected:
   void InitializeRenderer(render::RenderType renderType,
                           render::DimensionType dimensionType, int width,
                           int height);
+  void InitializeCamera(render::RenderType renderType,
+                        render::DimensionType dimensionType, int width,
+                        int height);
   void MainLoop();
   void ProcessEvents(core::EventQueue &eventQueue);
   std::shared_ptr<render::IRenderer> renderer;
+  std::shared_ptr<render::ICamera> camera;
 
 private:
   std::unique_ptr<window::VE_GLFWWindow> window;

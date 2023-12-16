@@ -2,6 +2,7 @@
 #define SANDBOX_APP_H
 
 #include "VE_GameObject2D.h"
+#include "interfaces/VE_IFollowableCamera.h"
 #include "VelopraEngineApplication.h"
 
 class SandboxApp : public velopraEngine::framework::VelopraEngineApplication {
@@ -16,8 +17,9 @@ protected:
   void InitializeGameObjects();
 
 private:
-  std::vector<std::unique_ptr<velopraEngine::gameLogic::GameObject2D>>
+  std::vector<std::shared_ptr<velopraEngine::gameLogic::GameObject2D>>
       gameObjects;
+  std::shared_ptr<velopraEngine::render::IFollowableCamera> camera;
 };
 
 #endif // SANDBOX_APP_H
