@@ -18,7 +18,7 @@ target_include_directories(SandboxGame PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includ
 
 
 # Link with the engine's modules
-target_link_libraries(SandboxGame PRIVATE VelopraCore VelopraRenderer VelopraWindowSystem VelopraGameLogic VelopraFramework)
+target_link_libraries(SandboxGame PRIVATE VelopraCore VelopraRenderer VelopraWindowSystem VelopraGameLogic VelopraInputSystem VelopraFramework)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
     message(STATUS "Windows platform detected - Shared Libraries (SandboxGame)")
@@ -42,6 +42,11 @@ if(WIN32 AND BUILD_SHARED_LIBS)
         $<TARGET_FILE_DIR:VelopraGameLogic>/VelopraGameLogic.dll
         $<TARGET_FILE_DIR:SandboxGame>
         COMMENT "Copying VelopraGameLogic DLL to executable directory (SandboxGame)"
+
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE_DIR:VelopraInputSystem>/VelopraInputSystem.dll
+        $<TARGET_FILE_DIR:SandboxGame>
+        COMMENT "Copying VelopraInputSystem DLL to executable directory (SandboxGame)"
 
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE_DIR:VelopraFramework>/VelopraFramework.dll

@@ -2,13 +2,13 @@
 #include "Opengl/3d/VE_OpenGLRenderer.h"
 #include "opengl/2d/VE_OpenGLOrthoCamera.h"
 #include "opengl/3d/VE_OpenGLCamera.h"
+#include "VelopraEngineApplication.h"
 #include "VE_Core.h"
 #include "VE_InputEventGenerator.h"
 #include "VE_LoggerMacros.h"
 #include "VE_RenderTypes.h"
 #include "VE_Time.h"
 #include "interfaces/VE_IRenderer.h"
-#include "VelopraEngineApplication.h"
 
 namespace velopraEngine {
 namespace framework {
@@ -16,6 +16,7 @@ namespace framework {
 VelopraEngineApplication::VelopraEngineApplication(
     render::RenderType renderType, render::DimensionType dimensionType)
     : isRunning(false) {
+  core::Logger::Init();
   InitializeWindow("Main window", 800, 600);
   InitializeRenderer(renderType, dimensionType, 800, 600);
   InitializeCamera(renderType, dimensionType, 800, 600);
@@ -68,6 +69,9 @@ void VelopraEngineApplication::InitializeRenderer(
                                                             width, height);
     } else if (dimensionType == render::DimensionType::ThreeD) {
       renderer = std::make_unique<render::OpenGLRenderer>(width, height);
+    }
+    if (renderer) {
+      renderer->Initialize();
     }
   } break;
   case render::RenderType::Vulkan:

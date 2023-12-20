@@ -10,7 +10,7 @@ set(INPUT_HEADER_FILES
     include/VE_Command.h
     include/VE_InputAPI.h
     include/VE_InputEventGenerator.h
-    include/VE_InputTypes.h
+    include/VE_inputTypes.h
 )
 
 # Create the InputSystem library

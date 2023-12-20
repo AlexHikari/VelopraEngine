@@ -1,9 +1,9 @@
 #include "VE_pch.h"
 
+#include "VE_WindowEvent.h"
 #include "opengl/2d/VE_OpenGL2DRenderer.h"
 #include "opengl/2d/VE_OpenGLOrthoCamera.h"
 #include "opengl/VE_OpenGLShader.h"
-#include "VE_WindowEvent.h"
 #include "opengl/VE_OpenGLTextureAtlas.h"
 
 namespace velopraEngine {
@@ -15,6 +15,7 @@ OpenGL2DRenderer::OpenGL2DRenderer(
     : textureLoader(textureLoader), windowWidth(windowWidth),
       windowHeight(windowHeight), VBO(0), VAO(0) {
   // Constructor initialization
+  textureAtlas = std::make_shared<OpenGLTextureAtlas>(2048,2048);
 }
 
 OpenGL2DRenderer::~OpenGL2DRenderer() {
@@ -46,8 +47,8 @@ void OpenGL2DRenderer::Initialize() {
 
   SetupBatchRendering();
 
-  core::Core::Instance().GetEventQueue()->Subscribe(core::EventType::WindowResize, this);
-
+  core::Core::Instance().GetEventQueue()->Subscribe(
+      core::EventType::WindowResize, this);
 }
 
 void OpenGL2DRenderer::BeginFrame() {
@@ -82,6 +83,11 @@ OpenGL2DRenderer::LoadTexture(const std::string &filePath) {
                              : filePath.substr(lastSlash + 1);
 
   VELOPRA_CORE_INFO("Requesting texture load: {}", filename);
+
+  if (!textureAtlas) {
+    VELOPRA_CORE_ERROR("Failed to load texture, uninitialized Atlas");
+    return nullptr;
+  }
 
   // Check if the texture is already in the atlas using the filename
   if (textureAtlas->HasSubTexture(filename)) {

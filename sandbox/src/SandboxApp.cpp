@@ -19,7 +19,7 @@ SandboxApp::~SandboxApp() {
 }
 
 void SandboxApp::InitializeGameObjects() {
-  auto texture = renderer->LoadTexture("path/to/texture.png");
+  auto texture = renderer->LoadTexture("wood_crate.png");
   auto gameObject = std::make_shared<velopraEngine::gameLogic::GameObject2D>(
       texture, velopraEngine::core::Vector2(10.0f, 10.0f),
       velopraEngine::core::Vector2(1.0f, 1.0f),

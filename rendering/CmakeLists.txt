@@ -27,6 +27,7 @@ set(RENDERING_HEADER_FILES
     include/VE_RenderTypes.h
     include/VE_RenderUtils.h
     include/interfaces/VE_ICamera.h
+    include/interfaces/VE_IFollowableCamera.h
     include/interfaces/VE_IMesh.h
     include/interfaces/VE_IModel.h
     include/interfaces/VE_IRenderer.h

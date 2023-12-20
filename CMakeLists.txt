@@ -19,7 +19,7 @@ if(MSVC)
 endif()
 
 # For debugging included files
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /showIncludes")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /showIncludes")
 
 project("VelopraEngine")
 

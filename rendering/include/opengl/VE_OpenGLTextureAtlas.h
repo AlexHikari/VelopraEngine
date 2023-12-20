@@ -15,12 +15,17 @@ namespace render {
 class OpenGLTextureAtlas {
 public:
   OpenGLTextureAtlas();
+  OpenGLTextureAtlas(int width, int height);
   std::shared_ptr<ITexture> GetTexture() const;
   void AddSubTexture(const std::string &name, const glm::vec2 &topLeft,
                      const glm::vec2 &dimensions);
   bool HasSubTexture(const std::string &name) const;
   void AddTexture(const std::string &name, std::shared_ptr<ITexture> texture);
   std::shared_ptr<SubTexture> GetSubTexture(const std::string &name) const;
+  void RemoveTexture(const std::string &name);
+  void UpdateTexture(const std::string &name,
+                     std::shared_ptr<ITexture> texture);
+  void DefragmentAtlas();
 
 private:
   class Node {
@@ -40,6 +45,8 @@ private:
 
   void UpdateAtlasTexture(std::shared_ptr<ITexture> texture,
                           const glm::vec2 &position);
+  void ClearNode(Node *node);
+  void DefragmentNode(Node *node);
 };
 
 } // namespace render

@@ -1,10 +1,41 @@
 #include "VE_pch.h"
 #include "opengl/VE_OpenGLTextureAtlas.h"
+#include "opengl/VE_OpenGLTexture.h"
 
 namespace velopraEngine {
 namespace render {
 
 OpenGLTextureAtlas::OpenGLTextureAtlas() {}
+
+OpenGLTextureAtlas::OpenGLTextureAtlas(int width, int height) {
+  // Generate and bind the atlas texture
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+
+  // Allocate memory for the atlas texture
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+               GL_UNSIGNED_BYTE, nullptr);
+
+  // Set texture parameters
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Unbind the texture
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  // Create an empty data vector for the texture
+  std::vector<uint8_t> emptyData(width * height * 4, 0); // 4 channels (RGBA)
+
+    // Store the texture in the atlasTexture shared pointer
+  atlasTexture = std::make_shared<OpenGLTexture>(textureID, width, height,
+                                                 emptyData, "AtlasTexture");
+
+  // Initialize the root node of the atlas
+  root = std::make_unique<Node>(0, 0, width, height);
+}
 
 OpenGLTextureAtlas::Node::Node(int x, int y, int width, int height)
     : position(x, y), size(width, height), occupied(false) {}
@@ -98,14 +129,53 @@ void OpenGLTextureAtlas::UpdateAtlasTexture(std::shared_ptr<ITexture> texture,
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
-std::shared_ptr<SubTexture> OpenGLTextureAtlas::GetSubTexture(const std::string &name) const {
+std::shared_ptr<SubTexture>
+OpenGLTextureAtlas::GetSubTexture(const std::string &name) const {
   auto it = subTextures.find(name);
   if (it != subTextures.end()) {
     return it->second;
   } else {
     VELOPRA_CORE_ERROR("SubTexture not found: {}", name);
-    return std::make_shared<SubTexture>(); // Return an empty SubTexture if not found
+    return std::make_shared<SubTexture>(); // Return an empty SubTexture if not
+                                           // found
+  }
+}
+
+void OpenGLTextureAtlas::RemoveTexture(const std::string &name) {
+  auto it = subTextures.find(name);
+  if (it != subTextures.end()) {
+    ClearNode(root.get());
+    subTextures.erase(it);
+  }
+}
+
+void OpenGLTextureAtlas::UpdateTexture(const std::string &name,
+                                       std::shared_ptr<ITexture> texture) {
+  RemoveTexture(name);
+  AddTexture(name, texture);
+}
+
+void OpenGLTextureAtlas::DefragmentAtlas() { DefragmentNode(root.get()); }
+
+void OpenGLTextureAtlas::ClearNode(Node *node) {
+  if (!node)
+    return;
+  node->occupied = false;
+  ClearNode(node->left.get());
+  ClearNode(node->right.get());
+}
+
+void OpenGLTextureAtlas::DefragmentNode(Node *node) {
+  if (!node)
+    return;
+  if (node->left && node->right) {
+    if (!node->left->occupied && !node->right->occupied) {
+      node->left.reset();
+      node->right.reset();
+    } else {
+      DefragmentNode(node->left.get());
+      DefragmentNode(node->right.get());
+    }
   }
 }
 
